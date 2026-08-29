@@ -17,7 +17,7 @@
         .day-num { font-weight: bold; font-size: 12px; color: #64748b; margin-bottom: 2px; }
         .event { padding: 4px 2px; border-radius: 3px; font-size: 10px; cursor: pointer; text-align: center; line-height: 1.1; word-break: break-word; }
         .event.tarde { background: #dbeafe; color: #1e40af; border-left: 2px solid #2563eb; }
-        .event.matinal { background: #fef9c3; color: #854d0e; border-left: 3px solid #ca8a04; font-weight: bold; }
+        .event.matinal { background: #fef9c3; color: #854d0e; border-left: 2px solid #ca8a04; font-weight: bold; }
         .event.festivo { background: #fee2e2; color: #991b1b; cursor: not-allowed; font-size: 8px; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; padding: 10px; }
         .modal { background: white; padding: 20px; border-radius: 8px; max-width: 100%; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -51,8 +51,7 @@
             <h3>Detalles de Reserva</h3>
             <p id="modalBody"></p>
             <div id="alertCopy" class="alert-copy">📋 ¡Texto de alarma copiado automáticamente!</div>
-            <!-- Enlace plano inofensivo que Android sí procesa sin bloqueos -->
-            <a href="https://calendar.google.com" target="_blank" class="btn-cal">📅 1. Abrir Google Calendar</a>
+            <a id="calendarGoLink" href="#" target="_blank" class="btn-cal">📅 1. Abrir Calendario en esa Fecha</a>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
@@ -127,10 +126,8 @@
             
             document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + "/" + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
             
-            // Texto redactado que se copiará automáticamente
             const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + "). Abrir la app del gimnasio.";
             
-            // Proceso nativo de copiado automático al portapapeles
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const alertDiv = document.getElementById('alertCopy');
                 alertDiv.style.display = 'block';
@@ -138,6 +135,10 @@
             }).catch(err => {
                 console.log('Error al copiar', err);
             });
+            
+            // Forzar la redirección web directa a la vista de la fecha destino del calendario
+            const targetCalendarUrl = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
+            document.getElementById('calendarGoLink').href = targetCalendarUrl;
             
             document.getElementById('modalOverlay').style.display = 'flex';
         }
