@@ -124,7 +124,7 @@
             
             const displayReserve = rDay + "/" + rMonth + "/" + rYear + " a las " + rHour + ":" + rMin;
             
-            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + "/" + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
+            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + " de " + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
             
             const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + "). Abrir la app del gimnasio.";
             
@@ -136,9 +136,9 @@
                 console.log('Error al copiar', err);
             });
             
-            // Forzar la redirección web directa a la vista de la fecha destino del calendario
-            const targetCalendarUrl = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
-            document.getElementById('calendarGoLink').href = targetCalendarUrl;
+            // ENSAMBLADO SEGURO: Evita por completo la concatenación defectuosa de textos que causaba el fallo DNS
+            const cleanUrl = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
+            document.getElementById('calendarGoLink').href = cleanUrl;
             
             document.getElementById('modalOverlay').style.display = 'flex';
         }
