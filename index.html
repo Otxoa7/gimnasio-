@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kettlebells Alcorcón</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f4f6f9; color: #333; margin: 0; padding: 10px; }
+        h2 { text-align: center; color: #1e3a8a; margin: 10px 0 15px; font-size: 1.4rem; }
+        .tabs { display: flex; justify-content: center; gap: 4px; margin-bottom: 12px; }
+        .tab-btn { flex: 1; max-width: 85px; padding: 10px 5px; border: none; background: #cbd5e1; cursor: pointer; border-radius: 6px; font-weight: bold; font-size: 12px; text-align: center; }
+        .tab-btn.active { background: #1e3a8a; color: white; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; background: white; padding: 8px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .day-header { text-align: center; font-weight: bold; background: #e2e8f0; padding: 6px 0; border-radius: 4px; font-size: 11px; }
+        .day-cell { min-height: 70px; border: 1px solid #e2e8f0; padding: 2px; border-radius: 4px; background: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+        .day-num { font-weight: bold; font-size: 12px; color: #64748b; margin-bottom: 2px; }
+        .event { padding: 4px 2px; border-radius: 3px; font-size: 10px; cursor: pointer; text-align: center; line-height: 1.1; word-break: break-word; }
+        .event.tarde { background: #dbeafe; color: #1e40af; border-left: 2px solid #2563eb; }
+        .event.matinal { background: #fef9c3; color: #854d0e; border-left: 2px solid #ca8a04; font-weight: bold; }
+        .event.festivo { background: #fee2e2; color: #991b1b; cursor: not-allowed; font-size: 8px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; padding: 10px; }
+        .modal { background: white; padding: 20px; border-radius: 8px; max-width: 100%; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal h3 { margin-top: 0; color: #1e3a8a; font-size: 1.2rem; }
+        .modal p { font-size: 13px; color: #475569; line-height: 1.4; }
+        .btn-cal { display: block; margin-top: 15px; background: #2563eb; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px; text-align: center; border: none; }
+        .btn-close { margin-top: 8px; background: #94a3b8; color: white; padding: 8px; border-radius: 4px; border: none; cursor: pointer; width: 100%; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <h2>Kettlebells 2026 🏋️</h2>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchMonth('septiembre')">Sept</button>
+        <button class="tab-btn" onclick="switchMonth('octubre')">Oct</button>
+        <button class="tab-btn" onclick="switchMonth('noviembre')">Nov</button>
+        <button class="tab-btn" onclick="switchMonth('diciembre')">Dic</button>
+    </div>
+
+    <div class="calendar-grid">
+        <div class="day-header">L</div><div class="day-header">M</div><div class="day-header">X</div>
+        <div class="day-header">J</div><div class="day-header">V</div><div class="day-header">S</div>
+        <div class="day-header">D</div>
+        <div id="calendar-days" style="display: contents;"></div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3>Detalles de Reserva</h3>
+            <p id="modalBody"></p>
+            <a id="calLink" class="btn-cal" target="_blank">➕ Añadir a Google Calendar</a>
+            <button class="btn-close" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        const scheduleData = {
+            septiembre: { offset: 1, days: 30, events: { 2: [{t:'17:45', m:false}], 7: [{t:'19:45', m:false}], 8: [{f:'Remedios'}], 9: [{t:'17:45', m:false}], 14: [{t:'19:45', m:false}], 16: [{t:'17:45', m:false}], 21: [{t:'19:45', m:false}], 23: [{t:'17:45', m:false}], 28: [{t:'19:45', m:false}], 30: [{t:'17:45', m:false}] }, datePattern: "2026-09" },
+            octubre: { offset: 3, days: 31, events: { 5: [{t:'11:00', m:true},{t:'19:45', m:false}], 7: [{t:'17:45', m:false}], 12: [{f:'Hispanidad'}], 14: [{t:'17:45', m:false}], 19: [{t:'11:00', m:true},{t:'19:45', m:false}], 21: [{t:'17:45', m:false}], 26: [{t:'19:45', m:false}], 28: [{t:'17:45', m:false}] }, datePattern: "2026-10" },
+            noviembre: { offset: 6, days: 30, events: { 2: [{f:'S. Santos'}], 4: [{t:'17:45', m:false}], 9: [{t:'19:45', m:false}], 11: [{t:'17:45', m:false}], 16: [{t:'11:00', m:true},{t:'19:45', m:false}], 18: [{t:'17:45', m:false}], 23: [{t:'19:45', m:false}], 25: [{t:'17:45', m:false}], 30: [{t:'19:45', m:false}] }, datePattern: "2026-11" },
+            diciembre: { offset: 1, days: 31, events: { 2: [{t:'17:45', m:false}], 7: [{f:'Constitu.'}], 8: [{f:'Inmacu.'}], 9: [{t:'17:45', m:false}], 14: [{t:'11:00', m:true},{t:'19:45', m:false}], 16: [{t:'17:45', m:false}], 21: [{t:'19:45', m:false}], 23: [{t:'17:45', m:false}], 25: [{f:'Navidad'}], 28: [{t:'19:45', m:false}], 30: [{t:'17:45', m:false}] }, datePattern: "2026-12" }
+        };
+
+        function switchMonth(monthKey) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCalendar(monthKey);
+        }
+
+        function renderCalendar(monthKey) {
+            const container = document.getElementById('calendar-days');
+            container.innerHTML = '';
+            const data = scheduleData[monthKey];
+            
+            for (let i = 0; i < data.offset; i++) {
+                let emptyCell = document.createElement('div');
+                emptyCell.className = 'day-cell';
+                emptyCell.style.background = '#f8fafc';
+                container.appendChild(emptyCell);
+            }
+            
+            for (let day = 1; day <= data.days; day++) {
+                let cell = document.createElement('div');
+                cell.className = 'day-cell';
+                
+                let num = document.createElement('div');
+                num.className = 'day-num';
+                num.innerText = day;
+                cell.appendChild(num);
+                
+                if (data.events[day]) {
+                    data.events[day].forEach(ev => {
+                        let evDiv = document.createElement('div');
+                        if (ev.f) {
+                            evDiv.className = 'event festivo';
+                            evDiv.innerText = '🔒 ' + ev.f;
+                        } else {
+                            evDiv.className = 'event ' + (ev.m ? 'matinal' : 'tarde');
+                            evDiv.innerText = ev.t;
+                            evDiv.onclick = () => openModal(day, ev.t, data.datePattern);
+                        }
+                        cell.appendChild(evDiv);
+                    });
+                }
+                container.appendChild(cell);
+            }
+        }
+
+        function openModal(day, time, datePattern) {
+            const formattedDay = day < 10 ? '0' + day : day;
+            const classDateStr = datePattern + "-" + formattedDay;
+            
+            let classDateTime = new Date(classDateStr + "T" + time + ":00");
+            let reserveDateTime = new Date(classDateTime.getTime() - (48 * 60 * 60 * 1000));
+            
+            const rYear = reserveDateTime.getFullYear();
+            const rMonth = String(reserveDateTime.getMonth() + 1).padStart(2, '0');
+            const rDay = String(reserveDateTime.getDate()).padStart(2, '0');
+            const rHour = String(reserveDateTime.getHours()).padStart(2, '0');
+            const rMin = String(reserveDateTime.getMinutes()).padStart(2, '0');
+            
+            const displayReserve = rDay + "/" + rMonth + "/" + rYear + " a las " + rHour + ":" + rMin;
+            
+            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + "/" + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'>" + displayReserve + "</span>";
+            
+            const gStart = rYear + rMonth + rDay + "T" + rHour + rMin + "00";
+            const gEnd = rYear + rMonth + rDay + "T" + String(parseInt(rHour) + 1).padStart(2, '0') + rMin + "00";
+            const gTitle = encodeURIComponent("⚠️ RESERVAR GIMNASIO: Kettlebells (" + time + ")");
+            const gDetails = encodeURIComponent("Toca para abrir la app del gimnasio y reservar la plaza de la clase del " + formattedDay + "/" + datePattern.split('-')[1] + " a las " + time);
+            
+            const googleCalUrl = "https://google.com" + gTitle + "&dates=" + gStart + "/" + gEnd + "&details=" + gDetails + "&sf=true&output=xml";
+            
+            document.getElementById('calLink').href = googleCalUrl;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        renderCalendar('septiembre');
+    </script>
+</body>
+</html>
+
