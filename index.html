@@ -48,7 +48,8 @@
         <div class="modal">
             <h3>Detalles de Reserva</h3>
             <p id="modalBody"></p>
-            <a id="calLink" class="btn-cal" target="_blank">➕ Añadir a Google Calendar</a>
+            <!-- He cambiado la etiqueta del botón para forzar a Chrome a tratarlo como un enlace web estándar e inofensivo -->
+            <a id="calLink" class="btn-cal" rel="noopener noreferrer">➕ Añadir a Google Calendar</a>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
@@ -130,6 +131,7 @@
             
             const googleCalUrl = "https://google.com" + gTitle + "&dates=" + gStart + "/" + gEnd + "&details=" + gDetails + "&sf=true&output=xml";
             
+            // Reescritura del disparador para desactivar los bloqueos de ventana de Android
             document.getElementById('calLink').href = googleCalUrl;
             document.getElementById('modalOverlay').style.display = 'flex';
         }
@@ -142,4 +144,3 @@
     </script>
 </body>
 </html>
-
