@@ -51,7 +51,7 @@
             <h3>Detalles de Reserva</h3>
             <p id="modalBody"></p>
             <div id="alertCopy" class="alert-copy">📋 ¡Texto de alarma copiado automáticamente!</div>
-            <a id="calendarGoLink" href="#" target="_blank" class="btn-cal">📅 1. Crear Alerta de Todo el Día</a>
+            <a id="calendarGoLink" href="#" target="_blank" class="btn-cal">📅 1. Abrir Calendario en esa Fecha</a>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
@@ -135,9 +135,9 @@
                 setTimeout(() => { alertDiv.style.display = 'none'; }, 4000);
             });
             
-            const dateParam = rYear + rMonth + rDay;
-            const allDayUrl = "https://google.com" + dateParam + "%2F" + dateParam;
-            document.getElementById('calendarGoLink').href = allDayUrl;
+            // REDIRECCIÓN DIRECTA MÓVIL OFICIAL: Abre Google Calendar saltando al día exacto de la reserva de forma limpia
+            const targetCalendarUrl = "https://calendar.google.com/calendar/u/0/r/day/" + rYear + "/" + rMonth + "/" + rDay;
+            document.getElementById('calendarGoLink').href = targetCalendarUrl;
             
             document.getElementById('modalOverlay').style.display = 'flex';
         }
