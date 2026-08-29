@@ -23,8 +23,9 @@
         .modal { background: white; padding: 20px; border-radius: 8px; max-width: 100%; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .modal h3 { margin-top: 0; color: #1e3a8a; font-size: 1.2rem; }
         .modal p { font-size: 13px; color: #475569; line-height: 1.4; }
-        .btn-cal { display: block; margin-top: 15px; background: #2563eb; color: white; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 13px; text-align: center; border: none; cursor: pointer; width: 100%; box-sizing: border-box; }
+        .btn-cal { display: block; margin-top: 15px; background: #2563eb; color: white; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 13px; text-align: center; text-decoration: none; width: 100%; box-sizing: border-box; }
         .btn-close { margin-top: 8px; background: #94a3b8; color: white; padding: 8px; border-radius: 4px; border: none; cursor: pointer; width: 100%; font-size: 12px; }
+        .alert-copy { background: #10b981; color: white; padding: 6px; border-radius: 4px; font-size: 11px; margin-top: 10px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -49,7 +50,9 @@
         <div class="modal">
             <h3>Detalles de Reserva</h3>
             <p id="modalBody"></p>
-            <button id="calLinkBtn" class="btn-cal">➕ Añadir a Google Calendar</button>
+            <div id="alertCopy" class="alert-copy">📋 ¡Texto de alarma copiado automáticamente!</div>
+            <!-- Enlace plano inofensivo que Android sí procesa sin bloqueos -->
+            <a href="https://calendar.google.com" target="_blank" class="btn-cal">📅 1. Abrir Google Calendar</a>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
@@ -122,20 +125,19 @@
             
             const displayReserve = rDay + "/" + rMonth + "/" + rYear + " a las " + rHour + ":" + rMin;
             
-            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + "/" + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'>" + displayReserve + "</span>";
+            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + "/" + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
             
-            const gStart = rYear + rMonth + rDay + "T" + rHour + rMin + "00";
-            const gEnd = rYear + rMonth + rDay + "T" + String(parseInt(rHour) + 1).padStart(2, '0') + rMin + "00";
-            const gTitle = encodeURIComponent("⚠️ RESERVAR GIMNASIO: Kettlebells (" + time + ")");
-            const gDetails = encodeURIComponent("Abre la app del gimnasio para reservar la plaza de la clase del " + formattedDay + "/" + datePattern.split('-')[1] + " a las " + time);
+            // Texto redactado que se copiará automáticamente
+            const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + "). Abrir la app del gimnasio.";
             
-            // MODIFICACIÓN NATIVA: Usamos un fallback seguro que fuerza la redirección usando una URL alternativa de API web que Android no puede interceptar
-            const googleCalUrl = "https://google.com" + gTitle + "&dates=" + gStart + "%2F" + gEnd + "&details=" + gDetails;
-            
-            document.getElementById('calLinkBtn').onclick = function() {
-                // Forzamos la apertura directa sustituyendo el historial para saltar los bloqueos de permisos de las apps independientes (PWA)
-                window.location.replace(googleCalUrl);
-            };
+            // Proceso nativo de copiado automático al portapapeles
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const alertDiv = document.getElementById('alertCopy');
+                alertDiv.style.display = 'block';
+                setTimeout(() => { alertDiv.style.display = 'none'; }, 4000);
+            }).catch(err => {
+                console.log('Error al copiar', err);
+            });
             
             document.getElementById('modalOverlay').style.display = 'flex';
         }
