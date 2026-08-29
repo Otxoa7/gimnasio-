@@ -66,7 +66,7 @@
 
         function switchMonth(monthKey) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if(event && event.target) { event.target.classList.add('active'); }
             renderCalendar(monthKey);
         }
 
@@ -100,7 +100,7 @@
                         } else {
                             evDiv.className = 'event ' + (ev.m ? 'matinal' : 'tarde');
                             evDiv.innerText = ev.t;
-                            evDiv.onclick = () => openModal(day, ev.t, data.datePattern);
+                            evDiv.onclick = function() { openModal(day, ev.t, monthKey); };
                         }
                         cell.appendChild(evDiv);
                     });
@@ -109,9 +109,10 @@
             }
         }
 
-        function openModal(day, time, datePattern) {
+        function openModal(day, time, monthName) {
+            const data = scheduleData[monthName];
             const formattedDay = day < 10 ? '0' + day : day;
-            const classDateStr = datePattern + "-" + formattedDay;
+            const classDateStr = data.datePattern + "-" + formattedDay;
             
             let classDateTime = new Date(classDateStr + "T" + time + ":00");
             let reserveDateTime = new Date(classDateTime.getTime() - (48 * 60 * 60 * 1000));
@@ -124,7 +125,7 @@
             
             const displayReserve = rDay + "/" + rMonth + "/" + rYear + " a las " + rHour + ":" + rMin;
             
-            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + " de " + datePattern.split('-')[1] + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
+            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + " de " + monthName + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
             
             const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + "). Abrir la app del gimnasio.";
             
@@ -132,13 +133,11 @@
                 const alertDiv = document.getElementById('alertCopy');
                 alertDiv.style.display = 'block';
                 setTimeout(() => { alertDiv.style.display = 'none'; }, 4000);
-            }).catch(err => {
-                console.log('Error al copiar', err);
             });
             
-            // ENSAMBLADO SEGURO: Evita por completo la concatenación defectuosa de textos que causaba el fallo DNS
-            const cleanUrl = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
-            document.getElementById('calendarGoLink').href = cleanUrl;
+            // REDIRECCIÓN DIRECTA MÓVIL OFICIAL: Abre Google Calendar saltando al día exacto de la reserva de forma limpia
+            const targetCalendarUrl = "https://calendar.google.com/calendar/u/0/r/day/" + rYear + "/" + rMonth + "/" + rDay;
+            document.getElementById('calendarGoLink').href = targetCalendarUrl;
             
             document.getElementById('modalOverlay').style.display = 'flex';
         }
