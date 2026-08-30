@@ -127,8 +127,9 @@
             // 1. Esta línea controla cómo se ve el texto DENTRO de la pantalla de la tablet (usa <br> y <b>)
             document.getElementById('modalBody').innerHTML = "⚠️ <b>RESERVAR GIMNASIO</b>: Kettlebells a las " + time + "<br>⏰ Plazo límite: " + displayReserve + "<br><br><b>ABRIR LA APP DEL GIMNASIO.</b>";
 
+            const textToCopy = "⚠️ RESERVAR 🏋️ Kettlebells • ⏰ " + time + " • 📅 Límite: " + rDay + "/" + rMonth + " • 📲 ABRIR APP GIMNASIO";
             // 2. Esta línea es la que se guarda en el portapapeles para cuando lo pegues en Google Calendar (usa \n y **)
-            const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + "\nPlazo límite el " + displayReserve + "\nABRIR LA APP DEL GIMNASIO.";
+           // const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + "\nPlazo límite el " + displayReserve + "\nABRIR LA APP DEL GIMNASIO.";
         
             //document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + " de " + monthName + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
             
