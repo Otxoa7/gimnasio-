@@ -29,23 +29,19 @@
     </style>
 </head>
 <body>
-
     <h2>Kettlebells 2026 🏋️</h2>
-    
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchMonth('septiembre')">Sept</button>
-        <button class="tab-btn" onclick="switchMonth('octubre')">Oct</button>
-        <button class="tab-btn" onclick="switchMonth('noviembre')">Nov</button>
-        <button class="tab-btn" onclick="switchMonth('diciembre')">Dic</button>
+        <button class="tab-btn active" onclick="sm('septiembre')">Sept</button>
+        <button class="tab-btn" onclick="sm('octubre')">Oct</button>
+        <button class="tab-btn" onclick="sm('noviembre')">Nov</button>
+        <button class="tab-btn" onclick="sm('diciembre')">Dic</button>
     </div>
-
     <div class="calendar-grid">
         <div class="day-header">L</div><div class="day-header">M</div><div class="day-header">X</div>
         <div class="day-header">J</div><div class="day-header">V</div><div class="day-header">S</div>
         <div class="day-header">D</div>
         <div id="calendar-days" style="display: contents;"></div>
     </div>
-
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h3>Detalles de Reserva</h3>
@@ -55,98 +51,61 @@
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
-
     <script>
-        const scheduleData = {
-            septiembre: { offset: 1, days: 30, events: { 2: [{t:'17:45', m:false}], 7: [{t:'19:45', m:false}], 8: [{f:'Remedios'}], 9: [{t:'17:45', m:false}], 14: [{t:'19:45', m:false}], 16: [{t:'17:45', m:false}], 21: [{t:'19:45', m:false}], 23: [{t:'17:45', m:false}], 28: [{t:'19:45', m:false}], 30: [{t:'17:45', m:false}] }, datePattern: "2026-09" },
-            octubre: { offset: 3, days: 31, events: { 5: [{t:'11:00', m:true},{t:'19:45', m:false}], 7: [{t:'17:45', m:false}], 12: [{f:'Hispanidad'}], 14: [{t:'17:45', m:false}], 19: [{t:'11:00', m:true},{t:'19:45', m:false}], 21: [{t:'17:45', m:false}], 26: [{t:'19:45', m:false}], 28: [{t:'17:45', m:false}] }, datePattern: "2026-10" },
-            noviembre: { offset: 6, days: 30, events: { 2: [{f:'S. Santos'}], 4: [{t:'17:45', m:false}], 9: [{t:'19:45', m:false}], 11: [{t:'17:45', m:false}], 16: [{t:'11:00', m:true},{t:'19:45', m:false}], 18: [{t:'17:45', m:false}], 23: [{t:'19:45', m:false}], 25: [{t:'17:45', m:false}], 30: [{t:'19:45', m:false}] }, datePattern: "2026-11" },
-            diciembre: { offset: 1, days: 31, events: { 2: [{t:'17:45', m:false}], 7: [{f:'Constitu.'}], 8: [{f:'Inmacu.'}], 9: [{t:'17:45', m:false}], 14: [{t:'11:00', m:true},{t:'19:45', m:false}], 16: [{t:'17:45', m:false}], 21: [{t:'19:45', m:false}], 23: [{t:'17:45', m:false}], 25: [{f:'Navidad'}], 28: [{t:'19:45', m:false}], 30: [{t:'17:45', m:false}] }, datePattern: "2026-12" }
+        const sd = {
+            septiembre: { o: 1, d: 30, ev: { 2: [{t:'17:45', m:false}], 7: [{t:'19:45', m:false}], 8: [{f:'Remedios'}], 9: [{t:'17:45', m:false}], 14: [{t:'19:45', m:false}], 16: [{t:'17:45', m:false}], 21: [{t:'19:45', m:false}], 23: [{t:'17:45', m:false}], 28: [{t:'19:45', m:false}], 30: [{t:'17:45', m:false}] }, p: "2026-09" },
+            octubre: { o: 3, d: 31, ev: { 5: [{t:'11:00', m:true},{t:'19:45', m:false}], 7: [{t:'17:45', m:false}], 12: [{f:'Hispanidad'}], 14: [{t:'17:45', m:false}], 19: [{t:'11:00', m:true},{t:'19:45', m:false}], 21: [{t:'17:45', m:false}], 26: [{t:'19:45', m:false}], 28: [{t:'17:45', m:false}] }, p: "2026-10" },
+            noviembre: { o: 6, d: 30, ev: { 2: [{f:'S. Santos'}], 4: [{t:'17:45', m:false}], 9: [{t:'19:45', m:false}], 11: [{t:'17:45', m:false}], 16: [{t:'11:00', m:true},{t:'19:45', m:false}], 18: [{t:'17:45', m:false}], 23: [{t:'19:45', m:false}], 25: [{t:'17:45', m:false}], 30: [{t:'19:45', m:false}] }, p: "2026-11" },
+            diciembre: { o: 1, d: 31, ev: { 2: [{t:'17:45', m:false}], 7: [{f:'Constitu.'}], 8: [{f:'Inmacu.'}], 9: [{t:'17:45', m:false}], 14: [{t:'11:00', m:true},{t:'19:45', m:false}], 16: [{t:'17:45', m:false}], 21: [{t:'19:45', m:false}], 23: [{t:'17:45', m:false}], 25: [{f:'Navidad'}], 28: [{t:'19:45', m:false}], 30: [{t:'17:45', m:false}] }, p: "2026-12" }
         };
-
-        function switchMonth(monthKey) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        function sm(k) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             if(event && event.target) { event.target.classList.add('active'); }
-            renderCalendar(monthKey);
+            rc(k);
         }
-
-        function renderCalendar(monthKey) {
-            const container = document.getElementById('calendar-days');
-            container.innerHTML = '';
-            const data = scheduleData[monthKey];
-            
-            for (let i = 0; i < data.offset; i++) {
-                let emptyCell = document.createElement('div');
-                emptyCell.className = 'day-cell';
-                emptyCell.style.background = '#f8fafc';
-                container.appendChild(emptyCell);
+        function rc(k) {
+            const c = document.getElementById('calendar-days'); c.innerHTML = ''; const data = sd[k];
+            for (let i = 0; i < data.o; i++) {
+                let e = document.createElement('div'); e.className = 'day-cell'; e.style.background = '#f8fafc'; c.appendChild(e);
             }
-            
-            for (let day = 1; day <= data.days; day++) {
-                let cell = document.createElement('div');
-                cell.className = 'day-cell';
-                
-                let num = document.createElement('div');
-                num.className = 'day-num';
-                num.innerText = day;
-                cell.appendChild(num);
-                
-                if (data.events[day]) {
-                    data.events[day].forEach(ev => {
+            for (let d = 1; d <= data.d; d++) {
+                let cell = document.createElement('div'); cell.className = 'day-cell';
+                let num = document.createElement('div'); num.className = 'day-num'; num.innerText = d; cell.appendChild(num);
+                if (data.ev[d]) {
+                    data.ev[d].forEach(ev => {
                         let evDiv = document.createElement('div');
                         if (ev.f) {
-                            evDiv.className = 'event festivo';
-                            evDiv.innerText = '🔒 ' + ev.f;
+                            evDiv.className = 'event festivo'; evDiv.innerText = '🔒 ' + ev.f;
                         } else {
-                            evDiv.className = 'event ' + (ev.m ? 'matinal' : 'tarde');
-                            evDiv.innerText = ev.t;
-                            evDiv.onclick = function() { openModal(day, ev.t, monthKey); };
+                            evDiv.className = 'event ' + (ev.m ? 'matinal' : 'tarde'); evDiv.innerText = ev.t;
+                            evDiv.onclick = function() { openModal(d, ev.t, k); };
                         }
                         cell.appendChild(evDiv);
                     });
                 }
-                container.appendChild(cell);
+                c.appendChild(cell);
             }
         }
-
-        function openModal(day, time, monthName) {
-            const data = scheduleData[monthName];
-            const formattedDay = day < 10 ? '0' + day : day;
-            const classDateStr = data.datePattern + "-" + formattedDay;
+        function openModal(d, t, m) {
+            const data = sd[m]; const fd = d < 10 ? '0' + d : d;
+            let cDT = new Date(data.p + "-" + fd + "T" + t + ":00");
+            let rDT = new Date(cDT.getTime() - (48 * 60 * 60 * 1000));
+            const rY = rDT.getFullYear(); const rM = String(rDT.getMonth() + 1).padStart(2, '0');
+            const rD = String(rDT.getDate()).padStart(2, '0'); const rH = String(rDT.getHours()).padStart(2, '0'); const rMin = String(rDT.getMinutes()).padStart(2, '0');
+            const dR = rD + "/" + rM + "/" + rY + " a las " + rH + ":" + rMin;
+            const dC = fd + "/" + data.p.split('-')[1] + "/" + rY;
+            document.getElementById('modalBody').innerHTML = "Clase el <b>" + fd + " de " + m + "</b> a las <b>" + t + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + dR + "</span>";
             
-            let classDateTime = new Date(classDateStr + "T" + time + ":00");
-            let reserveDateTime = new Date(classDateTime.getTime() - (48 * 60 * 60 * 1000));
-            
-            const rYear = reserveDateTime.getFullYear();
-            const rMonth = String(reserveDateTime.getMonth() + 1).padStart(2, '0');
-            const rDay = String(reserveDateTime.getDate()).padStart(2, '0');
-            const rHour = String(reserveDateTime.getHours()).padStart(2, '0');
-            const rMin = String(reserveDateTime.getMinutes()).padStart(2, '0');
-            
-            const displayReserve = rDay + "/" + rMonth + "/" + rYear + " a las " + rHour + ":" + rMin;
-            
-            document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + " de " + monthName + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
-            
-            const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + "). Abrir la app del gimnasio.";
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const alertDiv = document.getElementById('alertCopy');
-                alertDiv.style.display = 'block';
-                setTimeout(() => { alertDiv.style.display = 'none'; }, 4000);
+            // MENSAJE SOLICITADO PERFECTAMENTE REDACTADO
+            const msg = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + t + ". Clase el día " + dC + ". **ABRIR LA APP DEL GIMNASIO**";
+            navigator.clipboard.writeText(msg).then(() => {
+                const a = document.getElementById('alertCopy'); a.style.display = 'block'; setTimeout(() => { a.style.display = 'none'; }, 4000);
             });
-            
-            // REDIRECCIÓN DIRECTA MÓVIL OFICIAL: Abre Google Calendar saltando al día exacto de la reserva de forma limpia
-            const targetCalendarUrl = "https://calendar.google.com/calendar/u/0/r/day/" + rYear + "/" + rMonth + "/" + rDay;
-            document.getElementById('calendarGoLink').href = targetCalendarUrl;
-            
+            document.getElementById('calendarGoLink').href = "https://google.com" + rY + "/" + rM + "/" + rD;
             document.getElementById('modalOverlay').style.display = 'flex';
         }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-        }
-
-        renderCalendar('septiembre');
+        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+        rc('septiembre');
     </script>
 </body>
 </html>
