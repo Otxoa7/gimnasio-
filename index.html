@@ -127,7 +127,7 @@
             
             document.getElementById('modalBody').innerHTML = "Clase el <b>" + formattedDay + " de " + monthName + "</b> a las <b>" + time + "</b>.<br><br>⚠️ <b>Reserva límite (48h antes):</b><br><span style='color:#e11d48; font-weight:bold; font-size:14px;'> " + displayReserve + "</span>";
             
-            const textToCopy = "⚠️ **RESERVAR GIMNASIO**: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + "). **Abrir la app del gimnasio.**";
+            const textToCopy = "⚠️ RESERVAR GIMNASIO: Kettlebells a las " + time + " (Plazo límite el " + displayReserve + ").\n ABRE LA APP DEL GIMNASIO.";
             
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const alertDiv = document.getElementById('alertCopy');
