@@ -147,8 +147,7 @@
                 30: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}]
             }},
 <!-- ==================== FIN PARTE 2 DE 3 ==================== -->
-        
-<!-- ==================== INICIO PARTE 3 DE 3 ==================== -->
+        <!-- ==================== INICIO PARTE 3 DE 3 REPARACIÓN FINAL ==================== -->
             diciembre: { offset: 1, days: 31, datePattern: "2026-12", events: {
                 2: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
                 3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
@@ -233,23 +232,27 @@
             curId = id; const data = scheduleData[m]; const fd = d < 10 ? '0' + d : d;
             let classDateTime = new Date(`${data.datePattern}-${fd}T${ev.t}:00`);
             let reserveDateTime = new Date(classDateTime.getTime() - (48 * 60 * 60 * 1000));
-            const rYear = reserveDateTime.getFullYear();
-            const rMonth = String(reserveDateTime.getMonth() + 1).padStart(2, '0');
-            const rDay = String(reserveDateTime.getDate()).padStart(2, '0');
+            
+            const aNo = reserveDateTime.getFullYear();
+            const meS = String(reserveDateTime.getMonth() + 1).padStart(2, '0');
+            const diA = String(reserveDateTime.getDate()).padStart(2, '0');
             const rHour = String(reserveDateTime.getHours()).padStart(2, '0');
             const rMin = String(reserveDateTime.getMinutes()).padStart(2, '0');
-            const displayReserve = `${rDay}/${rMonth}/${rYear} a las ${rHour}:${rMin}`;
             
-            document.getElementById('mTitle').innerText = `${ev.n} (Nivel ${ev.l})`;
-            document.getElementById('modalBody').innerHTML = `⚠️ <b>RESERVAR GIMNASIO</b>: ${ev.n} a las ${ev.t}<br>⏰ Plazo límite: ${displayReserve}<br><br><b>ABRIR LA APP DEL GIMNASIO.</b>`;
+            const displayReserve = diA + "/" + meS + "/" + aNo + " a las " + rHour + ":" + rMin;
+            const displayClase = fd + "/" + meS + "/" + aNo;
             
-            const msg = `⚠️ RESERVAR 🏋️ ${ev.n} • ⏰ ${ev.t} • 📅 Límite: ${rDay}/${rMonth} • 📲 ABRIR APP GIMNASIO`;
+            document.getElementById('mTitle').innerText = ev.n + " (Nivel " + ev.l + ")";
+            document.getElementById('modalBody').innerHTML = "⚠️ <b>RESERVAR GIMNASIO</b>: " + ev.n + " a las " + ev.t + "<br>⏰ Plazo límite: " + displayReserve + "<br><br><b>ABRIR LA APP DEL GIMNASIO.</b>";
+            
+            // CORRECCIÓN CLAVE: Ahora se usan las variables exactas calculadas (diA y meS) para no romper el script
+            const msg = "⚠️ RESERVAR 🏋️ " + ev.n + " • ⏰ " + ev.t + " • 📅 Límite: " + diA + "/" + meS + " • 📲 ABRIR APP GIMNASIO";
             navigator.clipboard.writeText(msg).then(() => {
                 const a = document.getElementById('alertCopy'); a.style.display = 'block'; setTimeout(() => { a.style.display = 'none'; }, 3000);
             });
             
-            // LA LLAMADA INDESTRUCTIBLE DE LA VERSION ESTABLE: Texto plano directo inyectado al atributo href
-            document.getElementById('calendarGoLink').href = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
+            // La inyección limpia idéntica a tu versión estable de confianza
+            document.getElementById('calendarGoLink').href = "https://google.com" + aNo + "/" + meS + "/" + diA;
             
             const btn = document.getElementById('btnCheckAction');
             if (st.dis[id]) { btn.innerText = "❌ Quitar Marca"; btn.className = "btn-check uncheck"; }
@@ -271,3 +274,5 @@
 </body>
 </html>
 <!-- ==================== FIN PARTE 3 DE 3 ==================== -->
+
+                        
