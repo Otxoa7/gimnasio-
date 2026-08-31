@@ -21,16 +21,19 @@
         .day-cell { min-height: 85px; border: 1px solid #e2e8f0; padding: 2px; border-radius: 4px; background: #fff; display: flex; flex-direction: column; justify-content: flex-start; }
         .day-num { font-weight: bold; font-size: 12px; color: #64748b; margin-bottom: 2px; }
         .event { padding: 4px 2px; border-radius: 3px; font-size: 9px; cursor: pointer; text-align: center; line-height: 1.1; margin-bottom: 2px; font-weight: bold; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .event.n1 { background: #ffedd5; color: #c2410c; border-left: 2px solid #ea580c; }
-        .event.n2 { background: #e0f2fe; color: #0369a1; border-left: 2px solid #0284c7; }
-        .event.n3 { background: #f1f5f9; color: #475569; border-left: 2px solid #64748b; }
-        .event.disfrutada { background: #dcfce7 !important; color: #15803d !important; border-left: 2px solid #16a34a !important; text-decoration: line-through; }
-        .event.festivo { background: #fee2e2; color: #991b1b; cursor: not-allowed; font-size: 8px; font-weight: bold; }
+        
+        /* SEMÁFORO DE COLORES SOLICITADO */
+        .event.n1 { background: #dcfce7; color: #16a34a; border-left: 2px solid #15803d; } /* Nivel 1: Verde */
+        .event.n2 { background: #ffedd5; color: #ea580c; border-left: 2px solid #c2410c; } /* Nivel 2: Naranja */
+        .event.n3 { background: #fee2e2; color: #dc2626; border-left: 2px solid #991b1b; } /* Nivel 3: Rojo */
+        .event.festivo { background: #f3e8ff; color: #7c3aed; border-left: 2px solid #6d28d9; cursor: not-allowed; font-size: 8px; font-weight: bold; } /* Festivos: Morado Pastel */
+        
+        .event.disfrutada { background: #e2e8f0 !important; color: #94a3b8 !important; border-left: 2px solid #cbd5e1 !important; font-weight: normal; text-decoration: line-through; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; padding: 10px; }
         .modal { background: white; padding: 18px; border-radius: 8px; max-width: 100%; width: 290px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .modal h3 { margin-top: 0; color: #1e3a8a; font-size: 1.1rem; }
         .modal p { font-size: 12px; color: #475569; line-height: 1.4; margin: 10px 0; }
-        .btn-cal { display: block; margin-top: 12px; background: #2563eb; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; text-align: center; border: none; cursor: pointer; width: 100%; box-sizing: border-box; }
+        .btn-cal { display: block; margin-top: 15px; background: #2563eb; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; text-align: center; border: none; cursor: pointer; width: 100%; box-sizing: border-box; }
         .btn-check { display: block; margin-top: 8px; background: #16a34a; color: white; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 12px; border: none; cursor: pointer; width: 100%; box-sizing: border-box; }
         .btn-check.uncheck { background: #dc2626; }
         .btn-close { margin-top: 8px; background: #94a3b8; color: white; padding: 6px; border-radius: 4px; border: none; cursor: pointer; width: 100%; font-size: 11px; }
@@ -92,7 +95,7 @@
                 30: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}]
             }},
 <!-- ==================== FIN PARTE 1 DE 3 ==================== -->
-<!-- ==================== INICIO PARTE 2 DE 3 ==================== -->
+        <!-- ==================== INICIO PARTE 2 DE 3 ==================== -->
             octubre: { offset: 3, days: 31, datePattern: "2026-10", events: {
                 1: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
                 2: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
@@ -141,7 +144,7 @@
                 30: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}]
             }},
 <!-- ==================== FIN PARTE 2 DE 3 ==================== -->
-                     <!-- ==================== INICIO PARTE 3 DE 3 ==================== -->
+        <!-- ==================== INICIO PARTE 3 DE 3 ==================== -->
             diciembre: { offset: 1, days: 31, datePattern: "2026-12", events: {
                 2: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
                 3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
@@ -225,7 +228,7 @@
                 const a = document.getElementById('alertCopy'); a.style.display = 'block'; setTimeout(() => { a.style.display = 'none'; }, 3000);
             });
             
-            document.getElementById('calendarGoLink').href = `https://google.com{rYear}/${rMonth}/${rDay}`;
+            document.getElementById('calendarGoLink').href = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
             
             const btn = document.getElementById('btnCheckAction');
             if (st.dis[id]) { btn.innerText = "❌ Quitar Marca"; btn.className = "btn-check uncheck"; }
@@ -247,4 +250,3 @@
 </body>
 </html>
 <!-- ==================== FIN PARTE 3 DE 3 ==================== -->
-
