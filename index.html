@@ -1,4 +1,4 @@
-<!-- ==================== INICIO PARTE 1 DE 3 ==================== -->
+<!-- ==================== INICIO PARTE 1 DE 4 ==================== -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,10 +9,11 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f4f6f9; color: #333; margin: 0; padding: 10px; }
         h2 { text-align: center; color: #1e3a8a; margin: 5px 0 10px; font-size: 1.3rem; }
-        .dashboard { background: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-around; text-align: center; }
+        .dashboard { background: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-around; text-align: center; align-items: center; position: relative; }
         .dash-item { flex: 1; }
         .dash-num { font-size: 1.2rem; font-weight: bold; color: #1e3a8a; }
         .dash-label { font-size: 10px; color: #64748b; font-weight: bold; }
+        .btn-reset { background: #ef4444; color: white; border: none; padding: 4px 8px; font-size: 9px; font-weight: bold; border-radius: 4px; cursor: pointer; position: absolute; right: 8px; top: 12px; }
         .tabs { display: flex; justify-content: center; gap: 4px; margin-bottom: 10px; }
         .tab-btn { flex: 1; max-width: 85px; padding: 8px 4px; border: none; background: #cbd5e1; cursor: pointer; border-radius: 6px; font-weight: bold; font-size: 11px; text-align: center; }
         .tab-btn.active { background: #1e3a8a; color: white; }
@@ -22,13 +23,13 @@
         .day-num { font-weight: bold; font-size: 12px; color: #64748b; margin-bottom: 2px; }
         .event { padding: 4px 2px; border-radius: 3px; font-size: 9px; cursor: pointer; text-align: center; line-height: 1.1; margin-bottom: 2px; font-weight: bold; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         
-        /* SEMÁFORO DE COLORES SOLICITADO */
-        .event.n1 { background: #dcfce7; color: #16a34a; border-left: 2px solid #15803d; } /* Nivel 1: Verde */
-        .event.n2 { background: #ffedd5; color: #ea580c; border-left: 2px solid #c2410c; } /* Nivel 2: Naranja */
-        .event.n3 { background: #fee2e2; color: #dc2626; border-left: 2px solid #991b1b; } /* Nivel 3: Rojo */
-        .event.festivo { background: #f3e8ff; color: #7c3aed; border-left: 2px solid #6d28d9; cursor: not-allowed; font-size: 8px; font-weight: bold; } /* Festivos: Morado Pastel */
-        
+        /* SEMÁFORO DE COLORES INTUITIVO */
+        .event.n1 { background: #dcfce7; color: #16a34a; border-left: 2px solid #15803d; }
+        .event.n2 { background: #ffedd5; color: #ea580c; border-left: 2px solid #c2410c; }
+        .event.n3 { background: #fee2e2; color: #dc2626; border-left: 2px solid #991b1b; }
+        .event.festivo { background: #f3e8ff; color: #7c3aed; border-left: 2px solid #6d28d9; cursor: not-allowed; font-size: 8px; font-weight: bold; }
         .event.disfrutada { background: #e2e8f0 !important; color: #94a3b8 !important; border-left: 2px solid #cbd5e1 !important; font-weight: normal; text-decoration: line-through; }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; padding: 10px; }
         .modal { background: white; padding: 18px; border-radius: 8px; max-width: 100%; width: 290px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .modal h3 { margin-top: 0; color: #1e3a8a; font-size: 1.1rem; }
@@ -45,6 +46,7 @@
     <div class="dashboard">
         <div class="dash-item"><div class="dash-num" id="count-sol">0</div><div class="dash-label">SOLICITADAS</div></div>
         <div class="dash-item"><div class="dash-num" id="count-dis">0</div><div class="dash-label">DISFRUTADAS</div></div>
+        <button class="btn-reset" onclick="resetSolicitadas()">🔄 Reset Sol.</button>
     </div>
     <div class="tabs">
         <button class="tab-btn active" onclick="switchMonth('septiembre')">Sept</button>
@@ -63,11 +65,13 @@
             <h3 id="mTitle">Detalles</h3>
             <p id="modalBody"></p>
             <div id="alertCopy" class="alert-copy">📋 ¡Texto copiado automáticamente!</div>
-            <a id="calendarGoLink" href="#" target="_blank" class="btn-cal" onclick="trackSolicitada()">📅 1. Abrir Google Calendar</a>
+            <button id="calendarGoLinkBtn" class="btn-cal">📅 1. Abrir Google Calendar</button>
             <button id="btnCheckAction" class="btn-check" onclick="toggleDisfrutada()">✅ Marcar como Disfrutada</button>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
+<!-- ==================== FIN PARTE 1 DE 4 ==================== -->
+    <!-- ==================== INICIO PARTE 2 DE 4 ==================== -->
     <script>
         const scheduleData = {
             septiembre: { offset: 1, days: 30, datePattern: "2026-09", events: {
@@ -94,8 +98,6 @@
                 29: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
                 30: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}]
             }},
-<!-- ==================== FIN PARTE 1 DE 3 ==================== -->
-        <!-- ==================== INICIO PARTE 2 DE 3 ==================== -->
             octubre: { offset: 3, days: 31, datePattern: "2026-10", events: {
                 1: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
                 2: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
@@ -120,6 +122,8 @@
                 29: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
                 30: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}]
             }},
+<!-- ==================== FIN PARTE 2 DE 4 ==================== -->
+        <!-- ==================== INICIO PARTE 3 DE 4 ==================== -->
             noviembre: { offset: 6, days: 30, datePattern: "2026-11", events: {
                 2: [{f:'Todos los Santos'}],
                 3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
@@ -143,9 +147,6 @@
                 27: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
                 30: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}]
             }},
-<!-- ==================== FIN PARTE 2 DE 3 ==================== -->
-        
-         <!-- ==================== INICIO PARTE 3 DE 3 DEFINITIVA RESTAURADA ==================== -->
             diciembre: { offset: 1, days: 31, datePattern: "2026-12", events: {
                 2: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
                 3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
@@ -170,13 +171,13 @@
                 31: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}]
             }}
         };
-
+<!-- ==================== FIN PARTE 3 DE 4 ==================== -->
+        <!-- ==================== INICIO PARTE 4 DE 4 ==================== -->
         let cam = 'septiembre', curId = null;
         let st = JSON.parse(localStorage.getItem('gym_st_v2')) || { sol: {}, dis: {} };
 
         function sv() { localStorage.setItem('gym_st_v2', JSON.stringify(st)); upC(); }
         
-        // CONTADOR INTELIGENTE SEGÚN EL MES SELECCIONADO (ESTABLE V1)
         function upC() {
             const pattern = scheduleData[cam].datePattern;
             let sCount = 0; let dCount = 0;
@@ -184,6 +185,14 @@
             for (let k in st.dis) { if (k.startsWith(pattern) && st.dis[k]) dCount++; }
             document.getElementById('count-sol').innerText = sCount;
             document.getElementById('count-dis').innerText = dCount;
+        }
+
+        function resetSolicitadas() {
+            if (confirm("¿Seguro que quieres poner a cero las clases solicitadas de este mes?")) {
+                const pattern = scheduleData[cam].datePattern;
+                for (let k in st.sol) { if (k.startsWith(pattern)) { delete st.sol[k]; } }
+                sv(); rc(cam);
+            }
         }
 
         function switchMonth(m) {
@@ -223,15 +232,12 @@
             curId = id; const data = scheduleData[m]; const fd = d < 10 ? '0' + d : d;
             let classDateTime = new Date(`${data.datePattern}-${fd}T${ev.t}:00`);
             let reserveDateTime = new Date(classDateTime.getTime() - (48 * 60 * 60 * 1000));
-            
             const rYear = reserveDateTime.getFullYear();
             const rMonth = String(reserveDateTime.getMonth() + 1).padStart(2, '0');
             const rDay = String(reserveDateTime.getDate()).padStart(2, '0');
             const rHour = String(reserveDateTime.getHours()).padStart(2, '0');
             const rMin = String(reserveDateTime.getMinutes()).padStart(2, '0');
-            
             const displayReserve = `${rDay}/${rMonth}/${rYear} a las ${rHour}:${rMin}`;
-            const displayClase = `${fd}/${rMonth}/${rYear}`;
             
             document.getElementById('mTitle').innerText = `${ev.n} (Nivel ${ev.l})`;
             document.getElementById('modalBody').innerHTML = `⚠️ <b>RESERVAR GIMNASIO</b>: ${ev.n} a las ${ev.t}<br>⏰ Plazo límite: ${displayReserve}<br><br><b>ABRIR LA APP DEL GIMNASIO.</b>`;
@@ -241,9 +247,13 @@
                 const a = document.getElementById('alertCopy'); a.style.display = 'block'; setTimeout(() => { a.style.display = 'none'; }, 3000);
             });
             
-            // EL ENLACE INDESTRUCTIBLE DE LA VERSIÓN ESTABLE V1 (PARÁMETRO TEMPLATE LIMPIO)
-            const dateParam = "" + rYear + rMonth + rDay;
-            document.getElementById('calendarGoLink').href = "https://google.com" + dateParam + "%2F" + dateParam;
+            // BLINDAJE ABSOLUTO: Asignamos el evento de redirección mediante una función nativa limpia de JavaScript
+            document.getElementById('calendarGoLinkBtn').onclick = function() {
+                if (curId) { st.sol[curId] = true; sv(); }
+                const cleanTargetUrl = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
+                window.open(cleanTargetUrl, '_blank');
+                closeModal();
+            };
             
             const btn = document.getElementById('btnCheckAction');
             if (st.dis[id]) { btn.innerText = "❌ Quitar Marca"; btn.className = "btn-check uncheck"; }
@@ -251,19 +261,9 @@
             document.getElementById('modalOverlay').style.display = 'flex';
         }
 
-        function trackSolicitada() { if (curId) { st.sol[curId] = true; sv(); } closeModal(); }
-        
-        function toggleDisfrutada() {
-            if (curId) {
-                if (st.dis[curId]) { delete st.dis[curId]; } 
-                else { st.dis[curId] = true; }
-                sv(); rc(cam);
-            }
-            closeModal();
-        }
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
         upC(); rc('septiembre');
     </script>
 </body>
 </html>
-<!-- ==================== FIN PARTE 3 DE 3 DEFINITIVA RESTAURADA ==================== -->
+<!-- ==================== FIN PARTE 4 DE 4 ==================== -->
