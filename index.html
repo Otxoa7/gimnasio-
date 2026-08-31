@@ -1,4 +1,4 @@
-<!-- ==================== INICIO PARTE 1 DE 3 ==================== -->
+<!-- ==================== INICIO PARTE 1 DE 5 ==================== -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -51,8 +51,8 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchMonth('septiembre')">Sept</button>
         <button class="tab-btn" onclick="switchMonth('octubre')">Oct</button>
-        <button class="tab-btn" onclick="switchMonth('noviembre')">Nov</button>
-        <button class="tab-btn" onclick="switchMonth('diciembre')">Dic</button>
+        <button class="tab-btn" onclick="switchMonth('noviembre')">Noviembre</button>
+        <button class="tab-btn" onclick="switchMonth('diciembre')">Diciembre</button>
     </div>
     <div class="calendar-grid">
         <div class="day-header">L</div><div class="day-header">M</div><div class="day-header">X</div>
@@ -65,111 +65,116 @@
             <h3 id="mTitle">Detalles</h3>
             <p id="modalBody"></p>
             <div id="alertCopy" class="alert-copy">📋 ¡Texto copiado automáticamente!</div>
-            <!-- ENLACE FISICO DIRECTO EN ETIQUETA 'A' EXACTO A LA VERSION ESTABLE -->
+            <!-- LA ENTRADA ESTÁTICA ORIGINAL DE TU VERSIÓN ESTABLE -->
             <a id="calendarGoLink" href="#" target="_blank" class="btn-cal" onclick="trackSolicitada()">📅 1. Abrir Google Calendar</a>
             <button id="btnCheckAction" class="btn-check" onclick="toggleDisfrutada()">✅ Marcar como Disfrutada</button>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
-<!-- ==================== FIN PARTE 1 DE 3 ==================== -->
-    <!-- ==================== INICIO PARTE 2 DE 3 ==================== -->
+<!-- ==================== FIN PARTE 1 DE 5 ==================== -->
+    <!-- ==================== INICIO PARTE 2 DE 5 ==================== -->
     <script>
         const scheduleData = {
             septiembre: { offset: 1, days: 30, datePattern: "2026-09", events: {
-                1: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                2: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                4: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                7: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
+                1: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'08',d:'30'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'08',d:'30'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'08',d:'30'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'08',d:'30'}],
+                2: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'08',d:'31'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'08',d:'31'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'08',d:'31'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'08',d:'31'}],
+                3: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'01'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'01'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'01'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'01'}],
+                4: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'02'},{t:'17:45',n:'5x5',l:3,y:2026,m:'09',d:'02'}],
+                7: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'09',d:'05'},{t:'14:30',n:'5x5',l:3,y:2026,m:'09',d:'05'},{t:'15:30',n:'5x5',l:3,y:2026,m:'09',d:'05'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'05'}],
                 8: [{f:'Remedios (Alcorcón)'}],
-                9: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                10: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                11: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                14: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                15: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                16: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                17: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                18: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                21: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                22: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                23: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                24: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                25: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                28: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                29: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                30: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}]
+                9: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'09',d:'07'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'07'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'07'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'09',d:'07'}],
+                10: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'08'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'08'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'08'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'08'}],
+                11: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'09'},{t:'17:45',n:'5x5',l:3,y:2026,m:'09',d:'09'}],
+                14: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'09',d:'12'},{t:'14:30',n:'5x5',l:3,y:2026,m:'09',d:'12'},{t:'15:30',n:'5x5',l:3,y:2026,m:'09',d:'12'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'12'}],
+                15: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'13'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'13'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'13'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'13'}],
+                16: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'09',d:'14'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'14'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'14'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'09',d:'14'}],
+                17: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'15'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'15'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'15'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'15'}],
+                18: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'16'},{t:'17:45',n:'5x5',l:3,y:2026,m:'09',d:'16'}],
+                21: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'09',d:'19'},{t:'14:30',n:'5x5',l:3,y:2026,m:'09',d:'19'},{t:'15:30',n:'5x5',l:3,y:2026,m:'09',d:'19'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'19'}],
+                22: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'20'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'20'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'20'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'20'}],
+                23: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'09',d:'21'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'21'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'21'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'09',d:'21'}],
+                24: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'22'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'22'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'22'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'22'}],
+                25: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'23'},{t:'17:45',n:'5x5',l:3,y:2026,m:'09',d:'23'}],
+                28: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'09',d:'26'},{t:'14:30',n:'5x5',l:3,y:2026,m:'09',d:'26'},{t:'15:30',n:'5x5',l:3,y:2026,m:'09',d:'26'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'26'}],
+                29: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'27'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'27'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'27'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'27'}],
+                30: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'09',d:'28'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'28'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'09',d:'28'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'09',d:'28'}]
             }},
+<!-- ==================== FIN PARTE 2 DE 5 ==================== -->
+        <!-- ==================== INICIO PARTE 3 DE 5 ==================== -->
             octubre: { offset: 3, days: 31, datePattern: "2026-10", events: {
-                1: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                2: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                5: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                6: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                7: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                8: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                9: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
+                1: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'09',d:'29'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'09',d:'29'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'09',d:'29'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'09',d:'29'}],
+                2: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'09',d:'30'},{t:'17:45',n:'5x5',l:3,y:2026,m:'09',d:'30'}],
+                5: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'10',d:'03'},{t:'14:30',n:'5x5',l:3,y:2026,m:'10',d:'03'},{t:'15:30',n:'5x5',l:3,y:2026,m:'10',d:'03'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'03'}],
+                6: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'04'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'04'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'04'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'04'}],
+                7: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'10',d:'05'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'05'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'05'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'10',d:'05'}],
+                8: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'06'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'06'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'06'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'06'}],
+                9: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'07'},{t:'17:45',n:'5x5',l:3,y:2026,m:'10',d:'07'}],
                 12: [{f:'Fiesta Nacional de España'}],
-                13: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                14: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                15: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                16: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                19: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                20: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                21: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                22: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                23: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                26: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                27: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                28: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                29: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                30: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}]
+                13: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'11'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'11'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'11'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'11'}],
+                14: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'10',d:'12'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'12'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'12'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'10',d:'12'}],
+                15: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'13'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'13'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'13'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'13'}],
+                16: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'14'},{t:'17:45',n:'5x5',l:3,y:2026,m:'10',d:'14'}],
+                19: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'10',d:'17'},{t:'14:30',n:'5x5',l:3,y:2026,m:'10',d:'17'},{t:'15:30',n:'5x5',l:3,y:2026,m:'10',d:'17'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'17'}],
+                20: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'18'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'18'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'18'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'18'}],
+                21: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'10',d:'19'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'19'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'19'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'10',d:'19'}],
+                22: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'20'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'20'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'20'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'20'}],
+                23: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'21'},{t:'17:45',n:'5x5',l:3,y:2026,m:'10',d:'21'}],
+                26: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'10',d:'24'},{t:'14:30',n:'5x5',l:3,y:2026,m:'10',d:'24'},{t:'15:30',n:'5x5',l:3,y:2026,m:'10',d:'24'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'24'}],
+                27: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'25'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'25'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'25'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'25'}],
+                28: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'10',d:'26'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'26'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'26'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'10',d:'26'}],
+                29: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'10',d:'27'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'10',d:'27'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'10',d:'27'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'10',d:'27'}],
+                30: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'10',d:'28'},{t:'17:45',n:'5x5',l:3,y:2026,m:'10',d:'28'}],
+                31: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'10',d:'29'},{t:'14:30',n:'5x5',l:3,y:2026,m:'10',d:'29'},{t:'15:30',n:'5x5',l:3,y:2026,m:'10',d:'29'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'10',d:'29'}]
             }},
+<!-- ==================== FIN PARTE 3 DE 5 ==================== -->
+        <!-- ==================== INICIO PARTE 4 DE 5 ==================== -->
             noviembre: { offset: 6, days: 30, datePattern: "2026-11", events: {
                 2: [{f:'Todos los Santos'}],
-                3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                4: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                5: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                6: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                9: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                10: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                11: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                12: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                13: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                16: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                17: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                18: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                19: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                20: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                23: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                24: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                25: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                26: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                27: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                30: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}]
+                3: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'01'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'01'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'01'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'01'}],
+                4: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'11',d:'02'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'02'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'02'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'11',d:'02'}],
+                5: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'03'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'03'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'03'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'03'}],
+                6: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'04'},{t:'17:45',n:'5x5',l:3,y:2026,m:'11',d:'04'}],
+                9: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'11',d:'07'},{t:'14:30',n:'5x5',l:3,y:2026,m:'11',d:'07'},{t:'15:30',n:'5x5',l:3,y:2026,m:'11',d:'07'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'07'}],
+                10: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'08'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'08'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'08'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'08'}],
+                11: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'11',d:'09'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'09'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'09'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'11',d:'09'}],
+                12: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'10'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'10'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'10'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'10'}],
+                13: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'11'},{t:'17:45',n:'5x5',l:3,y:2026,m:'11',d:'11'}],
+                16: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'11',d:'14'},{t:'14:30',n:'5x5',l:3,y:2026,m:'11',d:'14'},{t:'15:30',n:'5x5',l:3,y:2026,m:'11',d:'14'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'14'}],
+                17: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'15'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'15'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'15'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'15'}],
+                18: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'11',d:'16'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'16'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'16'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'11',d:'16'}],
+                19: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'17'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'17'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'17'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'17'}],
+                20: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'18'},{t:'17:45',n:'5x5',l:3,y:2026,m:'11',d:'18'}],
+                23: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'11',d:'21'},{t:'14:30',n:'5x5',l:3,y:2026,m:'11',d:'21'},{t:'15:30',n:'5x5',l:3,y:2026,m:'11',d:'21'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'21'}],
+                24: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'22'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'22'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'22'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'22'}],
+                25: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'11',d:'23'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'23'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'23'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'11',d:'23'}],
+                26: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'11',d:'24'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'11',d:'24'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'11',d:'24'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'11',d:'24'}],
+                27: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'25'},{t:'17:45',n:'5x5',l:3,y:2026,m:'11',d:'25'}],
+                30: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'11',d:'28'},{t:'14:30',n:'5x5',l:3,y:2026,m:'11',d:'28'},{t:'15:30',n:'5x5',l:3,y:2026,m:'11',d:'28'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'28'}]
             }},
-<!-- ==================== FIN PARTE 2 DE 3 ==================== -->
-        <!-- ==================== INICIO PARTE 3 DE 3 RESTAURACIÓN ESTABLE ==================== -->
+<!-- ==================== FIN PARTE 4 DE 5 ==================== -->
+        <!-- ==================== INICIO PARTE 5 DE 5 ==================== -->
             diciembre: { offset: 1, days: 31, datePattern: "2026-12", events: {
-                2: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                4: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
+                2: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'11',d:'30'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'11',d:'30'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'11',d:'30'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'11',d:'30'}],
+                3: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'01'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'01'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'01'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'01'}],
+                4: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'02'},{t:'17:45',n:'5x5',l:3,y:2026,m:'12',d:'02'}],
                 7: [{f:'Día Constitución'}],
                 8: [{f:'Inmaculada'}],
-                9: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                10: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                11: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                14: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                16: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                17: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                18: [{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'5x5',l:3}],
-                21: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                22: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                23: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                24: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
+                9: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'12',d:'07'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'07'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'07'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'12',d:'07'}],
+                10: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'08'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'08'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'08'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'08'}],
+                11: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'09'},{t:'17:45',n:'5x5',l:3,y:2026,m:'12',d:'09'}],
+                14: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'12',d:'12'},{t:'14:30',n:'5x5',l:3,y:2026,m:'12',d:'12'},{t:'15:30',n:'5x5',l:3,y:2026,m:'12',d:'12'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'12'}],
+                16: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'12',d:'14'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'14'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'14'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'12',d:'14'}],
+                17: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'15'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'15'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'15'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'15'}],
+                18: [{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'16'},{t:'17:45',n:'5x5',l:3,y:2026,m:'12',d:'16'}],
+                21: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'12',d:'19'},{t:'14:30',n:'5x5',l:3,y:2026,m:'12',d:'19'},{t:'15:30',n:'5x5',l:3,y:2026,m:'12',d:'19'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'19'}],
+                22: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'20'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'20'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'20'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'20'}],
+                23: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'12',d:'21'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'21'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'21'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'12',d:'21'}],
+                24: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'22'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'22'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'22'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'22'}],
                 25: [{f:'Navidad'}],
-                28: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}],
-                29: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
-                30: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
-                31: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}]
+                28: [{t:'11:00',n:'Kettlebells',l:1,y:2026,m:'12',d:'26'},{t:'14:30',n:'5x5',l:3,y:2026,m:'12',d:'26'},{t:'15:30',n:'5x5',l:3,y:2026,m:'12',d:'26'},{t:'19:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'26'}],
+                29: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'27'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'27'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'27'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'27'}],
+                30: [{t:'11:00',n:'Clubbell',l:3,y:2026,m:'12',d:'28'},{t:'14:30',n:'Landmine',l:3,y:2026,m:'12',d:'28'},{t:'17:45',n:'Kettlebells',l:1,y:2026,m:'12',d:'28'},{t:'19:45',n:'Clubbell',l:3,y:2026,m:'12',d:'28'}],
+                31: [{t:'11:00',n:'Bodyweight',l:1,y:2026,m:'12',d:'29'},{t:'14:30',n:'TM 20',l:3,y:2026,m:'12',d:'29'},{t:'17:45',n:'Fundamentos',l:2,y:2026,m:'12',d:'29'},{t:'19:45',n:'Bodyweight',l:1,y:2026,m:'12',d:'29'}]
             }}
         };
 
@@ -230,37 +235,31 @@
 
         function openModal(d, ev, m, id) {
             curId = id; const data = scheduleData[m]; const fd = d < 10 ? '0' + d : d;
-            let classDateTime = new Date(`${data.datePattern}-${fd}T${ev.t}:00`);
-            let reserveDateTime = new Date(classDateTime.getTime() - (48 * 60 * 60 * 1000));
             
-            const rYear = reserveDateTime.getFullYear();
-            const rMonth = String(reserveDateTime.getMonth() + 1).padStart(2, '0');
-            const rDay = String(reserveDateTime.getDate()).padStart(2, '0');
-            const rHour = String(reserveDateTime.getHours()).padStart(2, '0');
-            const rMin = String(reserveDateTime.getMinutes()).padStart(2, '0');
+            // LECTURA DIRECTA DE LAS VARIABLES PRECARGADAS DEL PDF (SIN OPERACIONES MATEMÁTICAS)
+            const aNo = ev.y;
+            const meS = ev.m;
+            const diA = ev.d;
             
-            const displayReserve = rDay + "/" + rMonth + "/" + rYear + " a las " + rHour + ":" + rMin;
+            const displayReserve = diA + "/" + meS + "/" + aNo + " a las " + ev.h;
             
             document.getElementById('mTitle').innerText = ev.n + " (Nivel " + ev.l + ")";
             document.getElementById('modalBody').innerHTML = "⚠️ <b>RESERVAR GIMNASIO</b>: " + ev.n + " a las " + ev.t + "<br>⏰ Plazo límite: " + displayReserve + "<br><br><b>ABRIR LA APP DEL GIMNASIO.</b>";
             
-            const msg = "⚠️ RESERVAR 🏋️ " + ev.n + " • ⏰ " + ev.t + " • 📅 Límite: " + rDay + "/" + rMonth + " • 📲 ABRIR APP GIMNASIO";
+            const msg = "⚠️ RESERVAR 🏋️ " + ev.n + " • ⏰ " + ev.t + " • 📅 Límite: " + diA + "/" + meS + " • 📲 ABRIR APP GIMNASIO";
             navigator.clipboard.writeText(msg).then(() => {
                 const a = document.getElementById('alertCopy'); a.style.display = 'block'; setTimeout(() => { a.style.display = 'none'; }, 3000);
             });
             
-            // TU ESTRUCTURA ESTABLE ORIGINAL VOLVIENDO A LA ACCIÓN: Inyección estática directa al atributo href
-            document.getElementById('calendarGoLink').href = "https://google.com" + rYear + "/" + rMonth + "/" + rDay;
+            // ESTRUCTURA ESTABLE ORIGINAL BLINDADA CON VALORES ESTÁTICOS
+            document.getElementById('calendarGoLink').href = "https://google.com" + aNo + "/" + meS + "/" + diA;
             
             const btn = document.getElementById('btnCheckAction');
             if (st.dis[id]) { btn.innerText = "❌ Quitar Marca"; btn.className = "btn-check uncheck"; }
             else { btn.innerText = "✅ Marcar como Disfrutada"; btn.className = "btn-check"; }
             document.getElementById('modalOverlay').style.display = 'flex';
         }
-        
-        // Suma +1 al contador de solicitadas al hacer clic físico real en el botón azul de la versión estable
         function trackSolicitada() { if (curId) { st.sol[curId] = true; sv(); } closeModal(); }
-        
         function toggleDisfrutada() {
             if (curId) {
                 if (st.dis[curId]) { delete st.dis[curId]; } 
@@ -274,6 +273,4 @@
     </script>
 </body>
 </html>
-<!-- ==================== FIN PARTE 3 DE 3 RESTAURACIÓN ESTABLE ==================== -->
-
-                        
+<!-- ==================== FIN PARTE 5 DE 5 ==================== -->
