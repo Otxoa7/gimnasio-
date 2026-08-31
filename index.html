@@ -23,7 +23,7 @@
         .day-num { font-weight: bold; font-size: 12px; color: #64748b; margin-bottom: 2px; }
         .event { padding: 4px 2px; border-radius: 3px; font-size: 9px; cursor: pointer; text-align: center; line-height: 1.1; margin-bottom: 2px; font-weight: bold; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         
-        /* NUEVO CÓDIGO SEMÁFORO CORREGIDO */
+        /* SEMÁFORO DE COLORES SOLICITADO */
         .event.n1 { background: #dcfce7; color: #16a34a; border-left: 2px solid #15803d; }
         .event.n2 { background: #ffedd5; color: #ea580c; border-left: 2px solid #c2410c; }
         .event.n3 { background: #fee2e2; color: #dc2626; border-left: 2px solid #991b1b; }
@@ -65,7 +65,7 @@
             <h3 id="mTitle">Detalles</h3>
             <p id="modalBody"></p>
             <div id="alertCopy" class="alert-copy">📋 ¡Texto copiado automáticamente!</div>
-            <!-- RESTAURADO A ENLACE FISICO COMO EN LA VERSION ESTABLE 1.0 -->
+            <!-- ENLACE FISICO DIRECTO EN ETIQUETA 'A' EXACTO A LA VERSION ESTABLE -->
             <a id="calendarGoLink" href="#" target="_blank" class="btn-cal" onclick="trackSolicitada()">📅 1. Abrir Google Calendar</a>
             <button id="btnCheckAction" class="btn-check" onclick="toggleDisfrutada()">✅ Marcar como Disfrutada</button>
             <button class="btn-close" onclick="closeModal()">Cerrar</button>
@@ -147,7 +147,7 @@
                 30: [{t:'11:00',n:'Kettlebells',l:1},{t:'14:30',n:'5x5',l:3},{t:'15:30',n:'5x5',l:3},{t:'19:45',n:'Kettlebells',l:1}]
             }},
 <!-- ==================== FIN PARTE 2 DE 3 ==================== -->
-        <!-- ==================== INICIO PARTE 3 DE 3 REPARACIÓN FINAL ==================== -->
+        <!-- ==================== INICIO PARTE 3 DE 3 ==================== -->
             diciembre: { offset: 1, days: 31, datePattern: "2026-12", events: {
                 2: [{t:'11:00',n:'Clubbell',l:3},{t:'14:30',n:'Landmine',l:3},{t:'17:45',n:'Kettlebells',l:1},{t:'19:45',n:'Clubbell',l:3}],
                 3: [{t:'11:00',n:'Bodyweight',l:1},{t:'14:30',n:'TM 20',l:3},{t:'17:45',n:'Fundamentos',l:2},{t:'19:45',n:'Bodyweight',l:1}],
@@ -240,19 +240,18 @@
             const rMin = String(reserveDateTime.getMinutes()).padStart(2, '0');
             
             const displayReserve = diA + "/" + meS + "/" + aNo + " a las " + rHour + ":" + rMin;
-            const displayClase = fd + "/" + meS + "/" + aNo;
             
             document.getElementById('mTitle').innerText = ev.n + " (Nivel " + ev.l + ")";
             document.getElementById('modalBody').innerHTML = "⚠️ <b>RESERVAR GIMNASIO</b>: " + ev.n + " a las " + ev.t + "<br>⏰ Plazo límite: " + displayReserve + "<br><br><b>ABRIR LA APP DEL GIMNASIO.</b>";
             
-            // CORRECCIÓN CLAVE: Ahora se usan las variables exactas calculadas (diA y meS) para no romper el script
             const msg = "⚠️ RESERVAR 🏋️ " + ev.n + " • ⏰ " + ev.t + " • 📅 Límite: " + diA + "/" + meS + " • 📲 ABRIR APP GIMNASIO";
             navigator.clipboard.writeText(msg).then(() => {
                 const a = document.getElementById('alertCopy'); a.style.display = 'block'; setTimeout(() => { a.style.display = 'none'; }, 3000);
             });
             
-            // La inyección limpia idéntica a tu versión estable de confianza
-            document.getElementById('calendarGoLink').href = "https://google.com" + aNo + "/" + meS + "/" + diA;
+            // CONEXIÓN DIRECTA LIMPIA REPLICADA DE LA VERSIÓN ESTABLE V1
+            const linkLimpio = "https://google.com" + aNo + "/" + meS + "/" + diA;
+            document.getElementById('calendarGoLink').href = linkLimpio;
             
             const btn = document.getElementById('btnCheckAction');
             if (st.dis[id]) { btn.innerText = "❌ Quitar Marca"; btn.className = "btn-check uncheck"; }
@@ -274,5 +273,3 @@
 </body>
 </html>
 <!-- ==================== FIN PARTE 3 DE 3 ==================== -->
-
-                        
