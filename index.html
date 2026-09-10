@@ -85,16 +85,16 @@
     }
 
     const agenda = generarAgenda();
-    let state = JSON.parse(localStorage.getItem('tc_state_github_v10')) || {};
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v12')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state_github_v10', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v12', JSON.stringify(state));
     }
 
-    // NUEVO MOTOR BASE64: Lanza la ejecución del calendario de forma inmediata al vuelo
-    window.obtenerEnlaceCalendario = function(fechaClase, tipoClase, fechaObjetoIso) {
+    // MOTOR DE PROTOCOLO DE SISTEMA: Fuerza la apertura delegada en el OS de tu Redmi
+    window.obtenerEnlaceWebcal = function(fechaClase, tipoClase, fechaObjetoIso) {
         const d = new Date(fechaObjetoIso);
         const pad = (n) => String(n).padStart(2, '0');
         
@@ -123,8 +123,8 @@
             "END:VCALENDAR"
         ].join("\r\n");
 
-        // Codificación limpia en Base64 para saltarse la gestión de descargas de Android
-        return "data:text/calendar;base64," + btoa(unescape(encodeURIComponent(icsContent)));
+        // Cambiamos 'data:text/calendar' por el protocolo de sistema 'webcal'
+        return "webcal://data:text/calendar;charset=utf-8," + encodeURIComponent(icsContent);
     }
 
     function render() {
@@ -143,7 +143,7 @@
             if(c.tipo === "Bodyweight") iconoClase = "🤸";
             if(c.tipo === "Clubbel") iconoClase = "🪓";
 
-            const hrefInmediato = obtenerEnlaceCalendario(c.fecha, c.tipo, c.objetoFechaReserva.toISOString());
+            const hrefWebcal = obtenerEnlaceWebcal(c.fecha, c.tipo, c.objetoFechaReserva.toISOString());
 
             html += `
                 <div class="clase-row sem-${c.semana}">
@@ -161,8 +161,8 @@
                         <button class="${s.a?'active-a':''}" onclick="toggle('${c.id}','a')">
                             ${s.a?'✅ Asistida':'⬜ Asistir'}
                         </button>
-                        <!-- Convertido en un enlace nativo directo de ejecución instantánea -->
-                        <a class="btn-cal" href="${hrefInmediato}">
+                        <!-- Enlace Webcal directo -->
+                        <a class="btn-cal" href="${hrefWebcal}">
                             🗓️ Alarma 48h
                         </a>
                     </div>
