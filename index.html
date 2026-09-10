@@ -18,10 +18,11 @@
         .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; margin-bottom: 6px; }
         .fecha-texto { font-weight: bold; color: #2d3748; }
         .alerta { color: #c53030; font-weight: 600; font-size: 0.85rem; background: rgba(197, 48, 48, 0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
-        .btn-group { display: flex; gap: 10px; }
-        button { flex: 1; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; background: #edf2f7; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        button { flex: 1; min-width: 120px; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; background: #edf2f7; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
         button.active-r { background: #3182ce; color: white; border-color: #2b6cb0; }
         button.active-a { background: #38a169; color: white; border-color: #2f855a; }
+        button.btn-cal { background: #e2e8f0; color: #4a5568; border-color: #cbd5e0; }
         .badge { padding: 4px 8px; border-radius: 6px; color: white; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .Ket { background: #805ad5; } .Bod { background: #dd6b20; } .Clu { background: #319795; }
         .info-box { background: #fff; border-left: 4px solid #4a5568; padding: 12px; margin-bottom: 20px; border-radius: 4px; font-size: 0.85rem; color: #4a5568; }
@@ -31,10 +32,9 @@
 <div class="container">
     <div class="card">
         <h1>🏋️ Mi Agenda Digital TCenter</h1>
-        <p class="subtitle">Planificación en días alternos (L-M-V) con control de reservas (48h antes)</p>
+        <p class="subtitle">Planificación interactiva con integración de calendario para tu Redmi</p>
         <div class="info-box">
-            📌 <b>Código de colores por ciclos semanales:</b> Azul = Semana 1 | Verde = Semana 2 | Naranja = Semana 3.<br>
-            💾 <i>Los estados de los botones se quedan grabados automáticamente.</i>
+            📅 <b>¡Nuevo botón añadido!</b> Pulsa <code>🗓️ Alarma 48h</code> para abrir el calendario de tu móvil y guardar el aviso de apertura de reserva de forma automática.
         </div>
         <div id="contenido"></div>
     </div>
@@ -43,20 +43,14 @@
 <script>
     const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    
-    // Festivos nacionales y locales de Madrid detectados y bloqueados
     const festivos = ["2026-10-12", "2026-11-02", "2026-11-09", "2026-12-07", "2026-12-08", "2026-12-25", "2027-01-01", "2027-01-06", "2027-03-25", "2027-03-26", "2027-05-01", "2027-05-03", "2027-05-15"];
 
     function generarAgenda() {
         let clases = [];
-        let inicio = new Date(2026, 8, 14); // Lunes 14 de Septiembre de 2026
-        let fin = new Date(2027, 5, 30);    // Hasta finales de Junio de 2027
-        
+        let inicio = new Date(2026, 8, 14); 
+        let fin = new Date(2027, 5, 30);    
         let disciplinas = ["Kettlebells", "Bodyweight", "Clubbel"];
-        let dispIndex = 0;
-        let clasesEnMes = 0;
-        let mesActual = -1;
-        let ID_contador = 1;
+        let dispIndex = 0; let clasesEnMes = 0; let mesActual = -1; let ID_contador = 1;
 
         let current = new Date(inicio);
         while(current <= fin) {
@@ -68,14 +62,13 @@
                 clasesEnMes = 0;
             }
 
-            // Filtrar para cumplir extrictamente 9 clases al mes e intercaladas
             if ((day === 1 || day === 3 || day === 5) && !festivos.includes(dateStr) && clasesEnMes < 9) {
                 let tipo = disciplinas[dispIndex % 3];
-                let hora = (day === 5) ? "16:45" : "19:45"; // Clubbel los viernes a las 16:45, resto a las 19:45
+                let hora = (day === 5) ? "16:45" : "19:45"; 
                 
-                // Calcular la fecha exacta de reserva (48 horas antes)
                 let refReserva = new Date(current);
                 refReserva.setHours(refReserva.getHours() - 48);
+                
                 let fechaReservaTexto = `${diasSemana[refReserva.getDay()]} ${String(refReserva.getDate()).padStart(2,'0')}/${String(refReserva.getMonth()+1).padStart(2,'0')}/${refReserva.getFullYear()} a las ${hora}`;
 
                 clases.push({
@@ -85,7 +78,9 @@
                     tipo: tipo,
                     hora: hora,
                     reserva: fechaReservaTexto,
-                    semana: Math.floor(clasesEnMes / 3)
+                    semana: Math.floor(clasesEnMes / 3),
+                    // Datos para el archivo de calendario .ics
+                    objetoFechaReserva: new Date(refReserva)
                 });
                 
                 dispIndex++;
@@ -97,18 +92,58 @@
     }
 
     const agenda = generarAgenda();
-    let state = JSON.parse(localStorage.getItem('tc_state_github_v3')) || {};
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v4')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state_github_v3', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v4', JSON.stringify(state));
+    }
+
+    // Función mágica para generar el evento y abrir el calendario del móvil Redmi
+    window.crearEventoCalendario = function(fechaClase, tipoClase, fechaObjetoIso) {
+        const d = new Date(fechaObjetoIso);
+        
+        // Formato de fecha requerido por los calendarios (YYYYMMDDTHMMSSZ)
+        const pad = (n) => String(n).padStart(2, '0');
+        const yy = d.getUTCFullYear();
+        const mm = pad(d.getUTCMonth() + 1);
+        const dd = pad(d.getUTCDate());
+        const hh = pad(d.getUTCHours());
+        const min = pad(d.getUTCMinutes());
+        
+        const fechaFormateada = `${yy}${mm}${dd}T${hh}${min}00Z`;
+        const fechaFinFormateada = `${yy}${mm}${dd}T${hh}${pad(d.getUTCMinutes()+15)}00Z`; // Duración 15 min
+
+        const icsTXT = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "BEGIN:VEVENT",
+            `DTSTART:${fechaFormateada}`,
+            `DTEND:${fechaFinFormateada}`,
+            `SUMMARY:🚨 RESERVAR ${tipoClase.toUpperCase()} (TCenter)`,
+            `DESCRIPTION:Es el momento de abrir la app del gimnasio TCenter para reservar tu clase del ${fechaClase}.`,
+            "BEGIN:VALARM",
+            "TRIGGER:-PT0M", // Salta en el mismo minuto exacto
+            "ACTION:DISPLAY",
+            "DESCRIPTION:Recordatorio de Reserva",
+            "END:VALARM",
+            "END:VEVENT",
+            "END:VCALENDAR"
+        ].join("\n");
+
+        const blob = new Blob([icsTXT], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `reserva_${tipoClase}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     function render() {
         const cont = document.getElementById('contenido');
-        let html = '';
-        let currentMes = '';
+        let html = ''; let currentMes = '';
         
         agenda.forEach(c => {
             if(c.mes !== currentMes) {
@@ -128,10 +163,13 @@
                     </div>
                     <div class="btn-group">
                         <button class="${s.r?'active-r':''}" onclick="toggle('${c.id}','r')">
-                            ${s.r?'🔷 Reservada':'⬜ Marcar Reservada'}
+                            ${s.r?'🔷 Reservada':'⬜ Reservar'}
                         </button>
                         <button class="${s.a?'active-a':''}" onclick="toggle('${c.id}','a')">
-                            ${s.a?'✅ Asistida':'⬜ Marcar Asistida'}
+                            ${s.a?'✅ Asistida':'⬜ Asistir'}
+                        </button>
+                        <button class="btn-cal" onclick="crearEventoCalendario('${c.fecha}', '${c.tipo}', '${c.objetoFechaReserva.toISOString()}')">
+                            🗓️ Alarma 48h
                         </button>
                     </div>
                 </div>
