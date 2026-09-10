@@ -3,65 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Agenda TCenter</title>
+    <title>Mi Agenda TCenter Interactiva</title>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background: #f0f2f5; padding: 15px; margin: 0; color: #333; }
-        .card { background: white; padding: 20px; border-radius: 12px; max-width: 600px; margin: 0 auto 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        h2 { color: #1a365d; text-align: center; margin-top: 0; }
-        .mes-title { background: #2b6cb0; color: white; padding: 8px 12px; border-radius: 6px; font-weight: bold; margin: 20px 0 10px; }
-        .clase-row { display: flex; flex-direction: column; padding: 12px; border-bottom: 1px solid #edf2f7; border-radius: 6px; margin-bottom: 6px; }
-        .sem-0 { background-color: #ebf8ff; } /* Semana 1 - Azul */
-        .sem-1 { background-color: #f0fff4; } /* Semana 2 - Verde */
-        .sem-2 { background-color: #fffaf0; } /* Semana 3 - Naranja */
-        .meta { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; }
-        .alerta { color: #c53030; font-weight: bold; font-size: 0.85rem; }
-        .btn-group { display: flex; gap: 8px; }
-        button { flex: 1; padding: 8px; border: 1px solid #cbd5e0; border-radius: 6px; background: #edf2f7; cursor: pointer; font-size: 0.8rem; font-weight: 500; }
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f9; padding: 20px; margin: 0; color: #333; }
+        .container { max-width: 650px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 25px; }
+        h1 { color: #1a365d; text-align: center; margin-top: 0; font-size: 1.8rem; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.95rem; }
+        .mes-title { background: #2b6cb0; color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; margin-top: 25px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .clase-row { display: flex; flex-direction: column; padding: 14px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; }
+        .sem-0 { background-color: #ebf8ff; border-left: 5px solid #3182ce; }
+        .sem-1 { background-color: #f0fff4; border-left: 5px solid #38a169; }
+        .sem-2 { background-color: #fffaf0; border-left: 5px solid #dd6b20; }
+        .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; margin-bottom: 6px; }
+        .fecha-texto { font-weight: bold; color: #2d3748; }
+        .alerta { color: #c53030; font-weight: 600; font-size: 0.85rem; background: rgba(197, 48, 48, 0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+        .btn-group { display: flex; gap: 10px; }
+        button { flex: 1; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; background: #edf2f7; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
         button.active-r { background: #3182ce; color: white; border-color: #2b6cb0; }
         button.active-a { background: #38a169; color: white; border-color: #2f855a; }
-        .badge { padding: 2px 6px; border-radius: 4px; color: white; font-size: 0.75rem; font-weight: bold; }
+        .badge { padding: 4px 8px; border-radius: 6px; color: white; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .Ket { background: #805ad5; } .Bod { background: #dd6b20; } .Clu { background: #319795; }
+        .info-box { background: #fff; border-left: 4px solid #4a5568; padding: 12px; margin-bottom: 20px; border-radius: 4px; font-size: 0.85rem; color: #4a5568; }
     </style>
 </head>
 <body>
-<div class="card">
-    <h2>🏋️ Agenda Digital TCenter</h2>
-    <div id="contenido"></div>
+<div class="container">
+    <div class="card">
+        <h1>🏋️ Mi Agenda Digital TCenter</h1>
+        <p class="subtitle">Planificación en días alternos (L-M-V) con control de reservas (48h antes)</p>
+        <div class="info-box">
+            📌 <b>Código de colores por ciclos semanales:</b> Azul = Semana 1 | Verde = Semana 2 | Naranja = Semana 3.<br>
+            💾 <i>Los estados de los botones se quedan grabados automáticamente.</i>
+        </div>
+        <div id="contenido"></div>
+    </div>
 </div>
 
 <script>
-    // Datos de planificación optimizada en días alternos evitando festivos (L-M-V)
-    const agenda = [
-        // Septiembre 2026
-        {m:'Septiembre 2026', f:'Lunes 14/09/2026', t:'Kettlebells', h:'19:45', r:'12/09/2026 19:45', s:0, id:'s1'},
-        {m:'Septiembre 2026', f:'Miércoles 16/09/2026', t:'Bodyweight', h:'19:45', r:'14/09/2026 19:45', s:0, id:'s2'},
-        {m:'Septiembre 2026', f:'Viernes 18/09/2026', t:'Clubbel', h:'16:45', r:'16/09/2026 16:45', s:0, id:'s3'},
-        {m:'Septiembre 2026', f:'Lunes 21/09/2026', t:'Kettlebells', h:'19:45', r:'19/09/2026 19:45', s:1, id:'s4'},
-        {m:'Septiembre 2026', f:'Miércoles 23/09/2026', t:'Bodyweight', h:'19:45', r:'21/09/2026 19:45', s:1, id:'s5'},
-        {m:'Septiembre 2026', f:'Viernes 25/09/2026', t:'Clubbel', h:'16:45', r:'23/09/2026 16:45', s:1, id:'s6'},
-        {m:'Septiembre 2026', f:'Lunes 28/09/2026', t:'Kettlebells', h:'19:45', r:'26/09/2026 19:45', s:2, id:'s7'},
-        {m:'Septiembre 2026', f:'Miércoles 30/09/2026', t:'Bodyweight', h:'19:45', r:'28/09/2026 19:45', s:2, id:'s8'},
-        // Octubre 2026 (Esquivando festivo del lunes 12)
-        {m:'Octubre 2026', f:'Lunes 05/10/2026', t:'Kettlebells', h:'19:45', r:'03/10/2026 19:45', s:0, id:'o1'},
-        {m:'Octubre 2026', f:'Miércoles 07/10/2026', t:'Bodyweight', h:'19:45', r:'05/10/2026 19:45', s:0, id:'o2'},
-        {m:'Octubre 2026', f:'Viernes 09/10/2026', t:'Clubbel', h:'16:45', r:'07/10/2026 16:45', s:0, id:'o3'},
-        {m:'Octubre 2026', f:'Miércoles 14/10/2026', t:'Kettlebells', h:'17:45', r:'12/10/2026 17:45', s:1, id:'o4'},
-        {m:'Octubre 2026', f:'Viernes 16/10/2026', t:'Clubbel', h:'16:45', r:'14/10/2026 16:45', s:1, id:'o5'},
-        {m:'Octubre 2026', f:'Lunes 19/10/2026', t:'Kettlebells', h:'19:45', r:'17/10/2026 19:45', s:2, id:'o6'},
-        {m:'Octubre 2026', f:'Miércoles 21/10/2026', t:'Bodyweight', h:'19:45', r:'19/10/2026 19:45', s:2, id:'o7'},
-        {m:'Octubre 2026', f:'Viernes 23/10/2026', t:'Clubbel', h:'16:45', r:'21/10/2026 16:45', s:2, id:'o8'}
-        // Nota: El script expande automáticamente el patrón limpio L-M-V para el resto de meses hasta Junio 2027.
-    ];
+    const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    
+    // Festivos nacionales y locales de Madrid detectados y bloqueados
+    const festivos = ["2026-10-12", "2026-11-02", "2026-11-09", "2026-12-07", "2026-12-08", "2026-12-25", "2027-01-01", "2027-01-06", "2027-03-25", "2027-03-26", "2027-05-01", "2027-05-03", "2027-05-15"];
 
-    // Simulación del resto de meses para simplificar el código inicial
-    const mesesRestantes = ['Noviembre 2026', 'Diciembre 2026', 'Enero 2027', 'Febrero 2027', 'Marzo 2027', 'Abril 2027', 'Mayo 2027', 'Junio 2027'];
-    // El motor lee tu estado guardado de forma nativa
-    let state = JSON.parse(localStorage.getItem('tc_state')) || {};
+    function generarAgenda() {
+        let clases = [];
+        let inicio = new Date(2026, 8, 14); // Lunes 14 de Septiembre de 2026
+        let fin = new Date(2027, 5, 30);    // Hasta finales de Junio de 2027
+        
+        let disciplinas = ["Kettlebells", "Bodyweight", "Clubbel"];
+        let dispIndex = 0;
+        let clasesEnMes = 0;
+        let mesActual = -1;
+        let ID_contador = 1;
+
+        let current = new Date(inicio);
+        while(current <= fin) {
+            let day = current.getDay();
+            let dateStr = current.toISOString().split('T')[0];
+            
+            if(current.getMonth() !== mesActual) {
+                mesActual = current.getMonth();
+                clasesEnMes = 0;
+            }
+
+            // Filtrar para cumplir extrictamente 9 clases al mes e intercaladas
+            if ((day === 1 || day === 3 || day === 5) && !festivos.includes(dateStr) && clasesEnMes < 9) {
+                let tipo = disciplinas[dispIndex % 3];
+                let hora = (day === 5) ? "16:45" : "19:45"; // Clubbel los viernes a las 16:45, resto a las 19:45
+                
+                // Calcular la fecha exacta de reserva (48 horas antes)
+                let refReserva = new Date(current);
+                refReserva.setHours(refReserva.getHours() - 48);
+                let fechaReservaTexto = `${diasSemana[refReserva.getDay()]} ${String(refReserva.getDate()).padStart(2,'0')}/${String(refReserva.getMonth()+1).padStart(2,'0')}/${refReserva.getFullYear()} a las ${hora}`;
+
+                clases.push({
+                    id: 'clase_' + ID_contador++,
+                    mes: `${nombresMeses[current.getMonth()]} ${current.getFullYear()}`,
+                    fecha: `${diasSemana[day]} ${String(current.getDate()).padStart(2,'0')}/${String(current.getMonth()+1).padStart(2,'0')}/${current.getFullYear()}`,
+                    tipo: tipo,
+                    hora: hora,
+                    reserva: fechaReservaTexto,
+                    semana: Math.floor(clasesEnMes / 3)
+                });
+                
+                dispIndex++;
+                clasesEnMes++;
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        return clases;
+    }
+
+    const agenda = generarAgenda();
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v3')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v3', JSON.stringify(state));
     }
 
     function render() {
@@ -70,21 +111,28 @@
         let currentMes = '';
         
         agenda.forEach(c => {
-            if(c.m !== currentMes) {
-                currentMes = c.m;
+            if(c.mes !== currentMes) {
+                currentMes = c.mes;
                 html += `<div class="mes-title">${currentMes}</div>`;
             }
             const s = state[c.id] || {r:false, a:false};
+            const classBadge = c.tipo.substring(0,3);
             html += `
-                <div class="clase-row sem-${c.s}">
+                <div class="clase-row sem-${c.semana}">
                     <div class="meta">
-                        <span><b>${c.f}</b> a las ${c.h}h</span>
-                        <span class="badge ${c.t.substring(0,3)}">${c.t}</span>
+                        <span class="fecha-texto">${c.fecha} — ${c.hora}h</span>
+                        <span class="badge ${classBadge}">${c.tipo}</span>
                     </div>
-                    <div class="alerta">⏰ Reserva desde: ${c.r}</div>
-                    <div class="btn-group" style="margin-top:8px;">
-                        <button class="${s.r?'active-r':''}" onclick="toggle('${c.id}','r',this)">${s.r?'🔷 Reservada':'⬜ Reservar'}</button>
-                        <button class="${s.a?'active-a':''}" onclick="toggle('${c.id}','a',this)">${s.a?'✅ Asistida':'⬜ Asistir'}</button>
+                    <div>
+                        <span class="alerta">⏰ Apertura reserva: ${c.reserva}</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="${s.r?'active-r':''}" onclick="toggle('${c.id}','r')">
+                            ${s.r?'🔷 Reservada':'⬜ Marcar Reservada'}
+                        </button>
+                        <button class="${s.a?'active-a':''}" onclick="toggle('${c.id}','a')">
+                            ${s.a?'✅ Asistida':'⬜ Marcar Asistida'}
+                        </button>
                     </div>
                 </div>
             `;
@@ -92,7 +140,7 @@
         cont.innerHTML = html;
     }
 
-    window.toggle = function(id, key, btn) {
+    window.toggle = function(id, key) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = !state[id][key];
         save(id, key, state[id][key]);
