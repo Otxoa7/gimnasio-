@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -95,6 +95,7 @@
         localStorage.setItem('tc_state_github_v01', JSON.stringify(state));
     }
 
+    // FUNCIÓN DE EJECUCIÓN: Envía el mismo archivo dos veces seguidas para forzar la alerta del Redmi
     window.abrirGoogleCalendarUrl = function(fechaClase, tipoClase, dia, mes, fechaObjetoIso) {
         const d = new Date(fechaObjetoIso);
         const pad = (n) => String(n).padStart(2, '0');
@@ -125,10 +126,22 @@
         ].join("\r\n");
 
         const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' });
+        const nombreArchivo = `reserva_${tipoClase.toLowerCase()}_${dia}_${mes}.ics`;
+
+        // Primera descarga automática (Entra silenciosa en el disco)
+        ejecutarDescargaUnica(blob, nombreArchivo);
+
+        // Segunda descarga automática forzada tras 100ms para hacer saltar la ventana duplicada del Redmi
+        setTimeout(function() {
+            ejecutarDescargaUnica(blob, nombreArchivo);
+        }, 100);
+    }
+
+    // Función auxiliar limpia para gestionar la inyección del enlace de descarga
+    function ejecutarDescargaUnica(blob, nombre) {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `reserva_${tipoClase.toLowerCase()}_${dia}_${mes}.ics`;
-        
+        link.download = nombre;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -187,3 +200,4 @@
 </script>
 </body>
 </html>
+   
