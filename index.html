@@ -85,36 +85,48 @@
     }
 
     const agenda = generarAgenda();
-    let state = JSON.parse(localStorage.getItem('tc_state_github_v7')) || {};
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v8')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state_github_v7', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v8', JSON.stringify(state));
     }
 
+    // NUEVO MOTOR INTERNO: Genera un enlace de datos nativo que despierta el calendario del Redmi sin pasar por páginas web
     window.abrirGoogleCalendarUrl = function(fechaClase, tipoClase, fechaObjetoIso) {
         const d = new Date(fechaObjetoIso);
         const pad = (n) => String(n).padStart(2, '0');
         
-        const formatGoogleDate = (date) => {
-            return date.getUTCFullYear() +
-                   pad(date.getUTCMonth() + 1) +
-                   pad(date.getUTCDate()) + 'T' +
-                   pad(date.getUTCHours()) +
-                   pad(date.getUTCMinutes()) + '00Z';
-        };
-
-        const startStr = formatGoogleDate(d);
-        const endStr = formatGoogleDate(new Date(d.getTime() + 15 * 60000));
-
-        const titulo = encodeURIComponent(`RESERVAR ${tipoClase.toUpperCase()} TCENTER`);
-        const detalles = encodeURIComponent(`Abrir la app del gimnasio para reservar la clase del ${fechaClase}`);
+        const yy = d.getUTCFullYear();
+        const mm = pad(d.getUTCMonth() + 1);
+        const dd = pad(d.getUTCDate());
+        const hh = pad(d.getUTCHours());
+        const min = pad(d.getUTCMinutes());
         
-        // URL reconstruida de forma limpia con formato moderno para evitar errores de enlace
-        const urlGoogle = `https://google.com{titulo}&dates=${startStr}/${endStr}&details=${detalles}`;
+        const startStr = `${yy}${mm}${dd}T${hh}${min}00Z`;
+        const endStr = `${yy}${mm}${dd}T${hh}${pad(d.getUTCMinutes()+15)}00Z`;
+
+        const icsContent = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "BEGIN:VEVENT",
+            `DTSTART:${startStr}`,
+            `DTEND:${endStr}`,
+            `SUMMARY:RESERVAR ${tipoClase.toUpperCase()} TCENTER`,
+            `DESCRIPTION:Abrir app para reservar clase del ${fechaClase}`,
+            "BEGIN:VALARM",
+            "TRIGGER:-PT0M",
+            "ACTION:DISPLAY",
+            "END:VALARM",
+            "END:VEVENT",
+            "END:VCALENDAR"
+        ].join("\r\n");
+
+        // Transforma el evento en un enlace ejecutable directo para el sistema Android
+        const dataUri = "data:text/calendar;charset=utf-8," + encodeURIComponent(icsContent);
         
-        window.open(urlGoogle, '_blank');
+        const win = window.open(dataUri, '_self');
     }
 
     function render() {
@@ -165,4 +177,3 @@
 </script>
 </body>
 </html>
-
