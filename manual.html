@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Oficial de Modificación — Agenda Gym</title>
+    <style>
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7fafc; color: #2d3748; padding: 30px 15px; margin: 0; line-height: 1.6; }
+        .book { max-width: 700px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        h1 { color: #1a365d; border-bottom: 3px solid #2b6cb0; padding-bottom: 12px; font-size: 1.8rem; text-align: center; margin-top: 0; }
+        h2 { color: #2b6cb0; font-size: 1.3rem; margin-top: 30px; border-bottom: 1px solid #edf2f7; padding-bottom: 6px; }
+        h3 { color: #2d3748; font-size: 1rem; margin-top: 20px; font-weight: 700; }
+        p { font-size: 0.95rem; color: #4a5568; text-align: justify; }
+        code { background: #edf2f7; color: #c53030; padding: 3px 6px; border-radius: 4px; font-family: "Courier New", Courier, monospace; font-size: 0.9rem; font-weight: bold; }
+        pre { background: #1a202c; color: #aeacd4; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: "Courier New", Courier, monospace; font-size: 0.85rem; line-height: 1.4; border-left: 4px solid #3182ce; }
+        .pre-comment { color: #718096; font-style: italic; }
+        .pre-val { color: #f6ad55; }
+        .info-note { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; border-radius: 6px; margin: 20px 0; font-size: 0.9rem; color: #2b6cb0; }
+        .btn-print { display: block; width: 100%; max-width: 250px; margin: 20px auto 0; background: #38a169; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        @media print { .btn-print { display: none; } body { background: white; padding: 0; } .book { border: none; box-shadow: none; padding: 0; } }
+    </style>
+</head>
+<body>
+<div class="book">
+    <h1>📘 MANUAL DE MODIFICACIÓN TÉCNICA<br><small style="font-size:1rem; color:#718096;">Agenda Interactiva Gym (2026 - 2027)</small></h1>
+    
+    <button class="btn-print" onclick="window.print();">🖨️ Descargar/Imprimir en PDF</button>
+
+    <h2>1. INTRODUCCIÓN AL MOTOR DE LA AGENDA</h2>
+    <p>Este manual ha sido estructurado específicamente para permitir la gestión autónoma del calendario de entrenamientos en tu dispositivo <strong>Redmi</strong> de forma perpetua. Toda la lógica matemática que calcula de forma automática los bloques mensuales y las alertas de Google Calendar reside en la <strong>PARTE 2</strong> del archivo principal de tu repositorio.</p>
+    
+    <div class="info-note">
+        📌 <strong>Regla de oro de la programación:</strong> En los lenguajes de desarrollo web, los meses del año no empiezan en 1, sino en <strong>0</strong>. Por tanto, Enero se escribe como <code>0</code>, Febrero como <code>1</code>, Junio como <code>5</code> y Diciembre como <code>11</code>.
+    </div>
+
+    <h2>2. CONTROL DE FECHAS Y AMPLIACIÓN ANUAL</h2>
+    <p>Para alargar la vida útil de tu agenda para los siguientes años sin romper la alternancia de entrenamientos, debes localizar la línea de configuración del límite de tiempo y cambiar los parámetros del constructor de fecha nativo.</p>
+    <h3>Línea original en el código:</h3>
+    <pre>let fin = new Date(<span class="pre-val">2027</span>, <span class="pre-val">11</span>, <span class="pre-val">31</span>); <span class="pre-comment">// Hasta el 31 de Diciembre de 2027</span></pre>
+    <h3>Modificación práctica:</h3>
+    <p>Si deseas expandir el calendario para cubrir, por ejemplo, todo el año 2028 completo, sustituye los números internos de la variable respetando la sintaxis:</p>
+    <pre>let fin = new Date(<span class="pre-val">2028</span>, <span class="pre-val">11</span>, <span class="pre-val">31</span>);</pre>
+    <h2>3. INYECCIÓN Y GESTIÓN DE DÍAS FESTIVOS</h2>
+    <p>Para evitar que el sistema calcule entrenamientos o te envíe alarmas automáticas a tu Google Calendar en periodos vacacionales o días en los que el gimnasio permanece cerrado, el motor cuenta con una lista negra indexada (Array de exclusión).</p>
+    <h3>Línea original en el código:</h3>
+    <pre>const festivos = [
+    <span class="pre-val">"2026-10-12"</span>, <span class="pre-val">"2026-11-02"</span>, <span class="pre-val">"2026-11-09"</span>,
+    <span class="pre-val">"2027-01-01"</span>, <span class="pre-val">"2027-05-01"</span>, <span class="pre-val">"2027-12-25"</span>
+];</pre>
+    <h3>Cómo actualizarlo cada año:</h3>
+    <p>Al comenzar un nuevo curso, puedes borrar estas fechas y escribir los nuevos días festivos oficiales publicados por el Estado y la Comunidad de Madrid. El formato debe ser estrictamente de texto plano entre comillas dobles, usando guiones de separación y manteniendo siempre dos dígitos tanto para el mes como para el día (<code>AAAA-MM-DD</code>).</p>
+
+    <h2>4. MODIFICACIÓN DE DISCIPLINAS Y TARIFAS</h2>
+    <p>La agenda es capaz de absorber de forma automática cualquier cambio en tus contratos con el gimnasio, ya sea porque desees alternar más o menos actividades deportivas o porque cambies tu cupo de sesiones por mes.</p>
+    
+    <h3>A) Cambiar actividades de entrenamiento:</h3>
+    <p>Localiza el listado indexado de disciplinas. El motor las lee en bucle circular consecutivo, garantizando que nunca se repita la misma actividad dos días seguidos:</p>
+    <pre>let disciplinas = [<span class="pre-val">"Kettlebells"</span>, <span class="pre-val">"Bodyweight"</span>, <span class="pre-val">"Clubbel"</span>];</pre>
+    <p>Si deseas añadir una cuarta clase (por ejemplo, Pilates) o reducir tu entrenamiento a solo dos disciplinas, simplemente altera los elementos de la lista separados por comas:</p>
+    <pre>let disciplinas = [<span class="pre-val">"Kettlebells"</span>, <span class="pre-val">"Bodyweight"</span>, <span class="pre-val">"Clubbel"</span>, <span class="pre-val">"Pilates"</span>];</pre>
+
+    <h3>B) Cambiar el número de clases contratadas:</h3>
+    <p>Si varías tu tarifa (por ejemplo, subiendo de 9 clases al mes a 12 clases), debes modificar el limitador numérico dentro de la condicional de salto mensual:</p>
+    <pre><span class="pre-comment">// Cambiar el ".clasesEnMes < 9" por tu nuevo cupo exacto</span>
+if ((day === 1 || day === 3 || day === 5) && !festivos.includes(dateStr) && clasesEnMes < <span class="pre-val">12</span>)</pre>
+
+    <h2>5. RECONFIGURACIÓN DE HORARIOS Y DÍAS DE ENTRENO</h2>
+    <p>Si cambias tu rutina de tarde a mañana, o si el centro deportivo modifica de forma definitiva sus franjas horarias oficiales, el código cuenta con un interruptor ternario que calcula las horas al vuelo.</p>
+    <pre>let hora = (day === <span class="pre-val">5</span>) ? <span class="pre-val">"16:45"</span> : <span class="pre-val">"19:45"</span>;</pre>
+    <p>Si tus horarios pasan a ser fijos para todas tus clases sin importar que sea lunes, miércoles o viernes (por ejemplo, las sesiones del mediodía que querías a partir de las 14:00 h), elimina la condicional y escribe el valor en texto plano:</p>
+    <pre>let hora = <span class="pre-val">"14:30"</span>;</pre>
+    <p>Al guardar este cambio, todas las fechas reflejadas en la pantalla de tu Redmi se alterarán automáticamente y el botón de enlazado de Google Calendar configurará tus nuevas alarmas para 48 horas antes de esa franja horaria precisa.</p>
+    
+    <div style="text-align:center; margin-top:40px; color:#a0aec0; font-size:0.8rem; border-top:1px solid #edf2f7; padding-top:20px;">
+        Manual de Ingeniería de Software — Desarrollado en Colaboración Exclusiva (2026)
+    </div>
+</div>
+</body>
+</html>
