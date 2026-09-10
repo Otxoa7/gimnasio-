@@ -97,6 +97,7 @@
         const d = new Date(fechaObjetoIso);
         const pad = (n) => String(n).padStart(2, '0');
         
+        // Convertir la fecha al formato estricto ISO UTC sin guiones ni puntos que Google exige
         const formatGoogleDate = (date) => {
             return date.getUTCFullYear() +
                    pad(date.getUTCMonth() + 1) +
@@ -108,11 +109,12 @@
         const startStr = formatGoogleDate(d);
         const endStr = formatGoogleDate(new Date(d.getTime() + 15 * 60000));
 
-        const titulo = encodeURIComponent(`🚨 RESERVAR ${tipoClase.toUpperCase()} (TCenter)`);
-        const detalles = encodeURIComponent(`Es el momento de abrir la app del gimnasio TCenter para reservar tu clase presencial del día ${fechaClase}.`);
+        // Texto plano y limpio para evitar que el navegador del Redmi se confunda con caracteres extraños
+        const titulo = encodeURIComponent("RESERVAR " + tipoClase.toUpperCase() + " TCENTER");
+        const detalles = encodeURIComponent("Abrir la app del gimnasio para reservar la clase del " + fechaClase);
         
-        // URL limpia y corregida para enlazar directamente con la app de Google Calendar sin errores
-        const urlGoogle = "https://google.com" + titulo + "&dates=" + startStr + "/" + endStr + "&details=" + detalles;
+        // Construcción robusta de la URL de Google Calendar
+        const urlGoogle = `https://google.com{titulo}&dates=${startStr}/${endStr}&details=${detalles}`;
         
         window.open(urlGoogle, '_blank');
     }
