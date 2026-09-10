@@ -42,7 +42,7 @@
     function generarAgenda() {
         let clases = [];
         let inicio = new Date(2026, 8, 14); 
-        let fin = new Date(2027, 8, 30);    
+        let fin = new Date(2027, 5, 30);    
         let disciplinas = ["Kettlebells", "Bodyweight", "Clubbel"];
         let dispIndex = 0; let clasesEnMes = 0; let mesActual = -1; let ID_contador = 1;
 
@@ -85,19 +85,18 @@
     }
 
     const agenda = generarAgenda();
-    let state = JSON.parse(localStorage.getItem('tc_state_github_v6')) || {};
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v7')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state_github_v6', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v7', JSON.stringify(state));
     }
 
     window.abrirGoogleCalendarUrl = function(fechaClase, tipoClase, fechaObjetoIso) {
         const d = new Date(fechaObjetoIso);
         const pad = (n) => String(n).padStart(2, '0');
         
-        // Convertir la fecha al formato estricto ISO UTC sin guiones ni puntos que Google exige
         const formatGoogleDate = (date) => {
             return date.getUTCFullYear() +
                    pad(date.getUTCMonth() + 1) +
@@ -109,11 +108,10 @@
         const startStr = formatGoogleDate(d);
         const endStr = formatGoogleDate(new Date(d.getTime() + 15 * 60000));
 
-        // Texto plano y limpio para evitar que el navegador del Redmi se confunda con caracteres extraños
-        const titulo = encodeURIComponent("RESERVAR " + tipoClase.toUpperCase() + " TCENTER");
-        const detalles = encodeURIComponent("Abrir la app del gimnasio para reservar la clase del " + fechaClase);
+        const titulo = encodeURIComponent(`RESERVAR ${tipoClase.toUpperCase()} TCENTER`);
+        const detalles = encodeURIComponent(`Abrir la app del gimnasio para reservar la clase del ${fechaClase}`);
         
-        // Construcción robusta de la URL de Google Calendar
+        // URL reconstruida de forma limpia con formato moderno para evitar errores de enlace
         const urlGoogle = `https://google.com{titulo}&dates=${startStr}/${endStr}&details=${detalles}`;
         
         window.open(urlGoogle, '_blank');
@@ -167,3 +165,4 @@
 </script>
 </body>
 </html>
+
