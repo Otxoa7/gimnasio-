@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Agenda TCenter Interactiva</title>
+    <title>Mi agenda digital para el Gym hasta 06/27</title>
     <style>
         body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f9; padding: 20px; margin: 0; color: #333; }
         .container { max-width: 650px; margin: 0 auto; }
         .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 25px; }
-        h1 { color: #1a365d; text-align: center; margin-top: 0; font-size: 1.8rem; }
-        p.subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.95rem; }
+        h1 { color: #1a365d; text-align: center; margin-top: 0; font-size: 1.6rem; margin-bottom: 20px; }
         .mes-title { background: #2b6cb0; color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; margin-top: 25px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .clase-row { display: flex; flex-direction: column; padding: 14px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; }
         .sem-0 { background-color: #ebf8ff; border-left: 5px solid #3182ce; }
@@ -22,20 +21,15 @@
         button { flex: 1; min-width: 120px; padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; background: #edf2f7; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
         button.active-r { background: #3182ce; color: white; border-color: #2b6cb0; }
         button.active-a { background: #38a169; color: white; border-color: #2f855a; }
-        button.btn-cal { background: #e2e8f0; color: #4a5568; border-color: #cbd5e0; }
+        button.btn-cal { background: #e2e8f0; color: #1a365d; border-color: #cbd5e0; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .badge { padding: 4px 8px; border-radius: 6px; color: white; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .Ket { background: #805ad5; } .Bod { background: #dd6b20; } .Clu { background: #319795; }
-        .info-box { background: #fff; border-left: 4px solid #4a5568; padding: 12px; margin-bottom: 20px; border-radius: 4px; font-size: 0.85rem; color: #4a5568; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="card">
-        <h1>🏋️ Mi Agenda Digital TCenter</h1>
-        <p class="subtitle">Planificación interactiva con integración de calendario para tu Redmi</p>
-        <div class="info-box">
-            📅 <b>¡Nuevo botón añadido!</b> Pulsa <code>🗓️ Alarma 48h</code> para abrir el calendario de tu móvil y guardar el aviso de apertura de reserva de forma automática.
-        </div>
+        <h1>Mi agenda digital para el Gym hasta 06/27</h1>
         <div id="contenido"></div>
     </div>
 </div>
@@ -55,7 +49,7 @@
         let current = new Date(inicio);
         while(current <= fin) {
             let day = current.getDay();
-            let dateStr = current.toISOString().split('T')[0];
+            let dateStr = current.toISOString().split('T');
             
             if(current.getMonth() !== mesActual) {
                 mesActual = current.getMonth();
@@ -79,7 +73,6 @@
                     hora: hora,
                     reserva: fechaReservaTexto,
                     semana: Math.floor(clasesEnMes / 3),
-                    // Datos para el archivo de calendario .ics
                     objetoFechaReserva: new Date(refReserva)
                 });
                 
@@ -92,53 +85,34 @@
     }
 
     const agenda = generarAgenda();
-    let state = JSON.parse(localStorage.getItem('tc_state_github_v4')) || {};
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v5')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state_github_v4', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v5', JSON.stringify(state));
     }
 
-    // Función mágica para generar el evento y abrir el calendario del móvil Redmi
-    window.crearEventoCalendario = function(fechaClase, tipoClase, fechaObjetoIso) {
+    window.abrirGoogleCalendarUrl = function(fechaClase, tipoClase, fechaObjetoIso) {
         const d = new Date(fechaObjetoIso);
-        
-        // Formato de fecha requerido por los calendarios (YYYYMMDDTHMMSSZ)
         const pad = (n) => String(n).padStart(2, '0');
-        const yy = d.getUTCFullYear();
-        const mm = pad(d.getUTCMonth() + 1);
-        const dd = pad(d.getUTCDate());
-        const hh = pad(d.getUTCHours());
-        const min = pad(d.getUTCMinutes());
+        const formatGoogleDate = (date) => {
+            return date.getUTCFullYear() +
+                   pad(date.getUTCMonth() + 1) +
+                   pad(date.getUTCDate()) + 'T' +
+                   pad(date.getUTCHours()) +
+                   pad(date.getUTCMinutes()) + '00Z';
+        };
+
+        const startStr = formatGoogleDate(d);
+        const endStr = formatGoogleDate(new Date(d.getTime() + 15 * 60000));
+
+        const titulo = encodeURIComponent(`🚨 RESERVAR ${tipoClase.toUpperCase()} (TCenter)`);
+        const detalles = encodeURIComponent(`Es el momento de abrir la app del gimnasio TCenter para reservar tu clase presencial del día ${fechaClase}.`);
         
-        const fechaFormateada = `${yy}${mm}${dd}T${hh}${min}00Z`;
-        const fechaFinFormateada = `${yy}${mm}${dd}T${hh}${pad(d.getUTCMinutes()+15)}00Z`; // Duración 15 min
-
-        const icsTXT = [
-            "BEGIN:VCALENDAR",
-            "VERSION:2.0",
-            "BEGIN:VEVENT",
-            `DTSTART:${fechaFormateada}`,
-            `DTEND:${fechaFinFormateada}`,
-            `SUMMARY:🚨 RESERVAR ${tipoClase.toUpperCase()} (TCenter)`,
-            `DESCRIPTION:Es el momento de abrir la app del gimnasio TCenter para reservar tu clase del ${fechaClase}.`,
-            "BEGIN:VALARM",
-            "TRIGGER:-PT0M", // Salta en el mismo minuto exacto
-            "ACTION:DISPLAY",
-            "DESCRIPTION:Recordatorio de Reserva",
-            "END:VALARM",
-            "END:VEVENT",
-            "END:VCALENDAR"
-        ].join("\n");
-
-        const blob = new Blob([icsTXT], { type: 'text/calendar;charset=utf-8' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `reserva_${tipoClase}.ics`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const urlGoogle = `https://google.com{titulo}&dates=${startStr}/${endStr}&details=${detalles}&sf=true&output=xml`;
+        
+        window.open(urlGoogle, '_blank');
     }
 
     function render() {
@@ -168,8 +142,8 @@
                         <button class="${s.a?'active-a':''}" onclick="toggle('${c.id}','a')">
                             ${s.a?'✅ Asistida':'⬜ Asistir'}
                         </button>
-                        <button class="btn-cal" onclick="crearEventoCalendario('${c.fecha}', '${c.tipo}', '${c.objetoFechaReserva.toISOString()}')">
-                            🗓️ Alarma 48h
+                        <button class="btn-cal" onclick="abrirGoogleCalendarUrl('${c.fecha}', '${c.tipo}', '${c.objetoFechaReserva.toISOString()}')">
+                            🗓️ Enlazar Calendar
                         </button>
                     </div>
                 </div>
