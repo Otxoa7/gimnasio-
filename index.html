@@ -29,7 +29,7 @@
 <body>
 <div class="container">
     <div class="card">
-        <h1>Mi agenda digital para el Gym hasta 06/27</h1>
+        <h1>🏋️ Mi agenda digital para el Gym hasta 06/27</h1>
         <div id="contenido"></div>
     </div>
 </div>
@@ -69,6 +69,8 @@
                     id: 'clase_' + ID_contador++,
                     mes: `${nombresMeses[current.getMonth()]} ${current.getFullYear()}`,
                     fecha: `${diasSemana[day]} ${String(current.getDate()).padStart(2,'0')}/${String(current.getMonth()+1).padStart(2,'0')}/${current.getFullYear()}`,
+                    diaMes: String(current.getDate()).padStart(2,'0'),
+                    numMes: String(current.getMonth()+1).padStart(2,'0'),
                     tipo: tipo,
                     hora: hora,
                     reserva: fechaReservaTexto,
@@ -85,16 +87,16 @@
     }
 
     const agenda = generarAgenda();
-    let state = JSON.parse(localStorage.getItem('tc_state_github_v8')) || {};
+    let state = JSON.parse(localStorage.getItem('tc_state_github_v9')) || {};
 
     function save(id, key, val) {
         if(!state[id]) state[id] = {r:false, a:false};
         state[id][key] = val;
-        localStorage.setItem('tc_state_github_v8', JSON.stringify(state));
+        localStorage.setItem('tc_state_github_v9', JSON.stringify(state));
     }
 
-    // NUEVO MOTOR INTERNO: Genera un enlace de datos nativo que despierta el calendario del Redmi sin pasar por páginas web
-    window.abrirGoogleCalendarUrl = function(fechaClase, tipoClase, fechaObjetoIso) {
+    // NUEVO MOTOR DE DESCARGA TRANSPARENTE: Asigna nombres de archivo únicos al vuelo para tu Redmi
+    window.abrirGoogleCalendarUrl = function(fechaClase, tipoClase, dia, mes, fechaObjetoIso) {
         const d = new Date(fechaObjetoIso);
         const pad = (n) => String(n).padStart(2, '0');
         
@@ -123,10 +125,17 @@
             "END:VCALENDAR"
         ].join("\r\n");
 
-        // Transforma el evento en un enlace ejecutable directo para el sistema Android
-        const dataUri = "data:text/calendar;charset=utf-8," + encodeURIComponent(icsContent);
+        // Crear un Blob de datos dinámico para forzar un nombre único en Android
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
         
-        const win = window.open(dataUri, '_self');
+        // El nombre cambia según la clase y el día, evitando colisiones de archivos en tu móvil
+        link.download = `reserva_${tipoClase.toLowerCase()}_${dia}_${mes}.ics`;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     function render() {
@@ -140,10 +149,16 @@
             }
             const s = state[c.id] || {r:false, a:false};
             const classBadge = c.tipo.substring(0,3);
+            
+            // Iconos dinámicos decorativos según el tipo de disciplina
+            let iconoClase = "🏋️";
+            if(c.tipo === "Bodyweight") iconoClase = "🤸";
+            if(c.tipo === "Clubbel") iconoClase = "🪓";
+
             html += `
                 <div class="clase-row sem-${c.semana}">
                     <div class="meta">
-                        <span class="fecha-texto">${c.fecha} — ${c.hora}h</span>
+                        <span class="fecha-texto">${iconoClase} ${c.fecha} — ${c.hora}h</span>
                         <span class="badge ${classBadge}">${c.tipo}</span>
                     </div>
                     <div>
@@ -156,8 +171,8 @@
                         <button class="${s.a?'active-a':''}" onclick="toggle('${c.id}','a')">
                             ${s.a?'✅ Asistida':'⬜ Asistir'}
                         </button>
-                        <button class="btn-cal" onclick="abrirGoogleCalendarUrl('${c.fecha}', '${c.tipo}', '${c.objetoFechaReserva.toISOString()}')">
-                            🗓️ Enlazar Calendar
+                        <button class="btn-cal" onclick="abrirGoogleCalendarUrl('${c.fecha}', '${c.tipo}', '${c.diaMes}', '${c.numMes}', '${c.objetoFechaReserva.toISOString()}')">
+                            🗓️ Alarma 48h
                         </button>
                     </div>
                 </div>
